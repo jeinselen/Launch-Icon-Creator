@@ -188,12 +188,12 @@ function createArray() {
 	var placement = document.getElementById('placement');
 	var container = document.getElementById('container');
 	container.innerHTML = ''; // Remove any previous content
-	var containerRes = size1*tileRes
+	var containerRes = size1*tileRes;
 	container.style.width = containerRes+'px';
 	container.style.height = containerRes+'px';
 	placement.style.width = containerRes+'px';
 	placement.style.height = containerRes+'px';
-	// Don't enable placement changes till the mouse interactions are figured out for scaled values
+	// Don't enable placement scaling changes till the mouse interactions are figured out for scaled values
 	// var placementScale = placementSize / containerRes;
 	// placement.style.transform = "scale("+placementScale+")";
 	
@@ -237,6 +237,7 @@ function setArray(str) {
 	
 //	logVariables("4");
 	
+	setForeground();
 	updateDisplay();
 	return;
 }
@@ -260,27 +261,95 @@ createArray();
 // Change colours
 
 Array.prototype.random = function () {
-	return this[Math.floor(Math.random() * this.length)];
+	return this[Math.floor(Math.random() * this.length)];		
+}
+
+function clickElement(id) {
+	document.getElementById(id).click();
+}
+
+function gradientArray(gradient) {
+	// The following assumes repeating gradient where first and last stop are the same and shouldn't be duplicated in a frequency-sensitive array
+	const stops = gradient.match(/rgba?\([^)]+\)(?!\))|#[0-9a-f]{3,6}(?!\))/gi); // Ignore last gradient stop
+	return stops;
+}
+
+function loadBackgroundImage(el) {
+	// https://www.webmound.com/save-images-localstorage-javascript/
+	const reader = new FileReader()
+	reader.readAsDataURL(el.files[0])
+	reader.addEventListener('load', () => {
+		// console.log("loaded image data: " + reader.result);
+		localStorage.setItem('backgroundImage', reader.result)
+		document.querySelector(':root').style.setProperty('--backgroundImage', 'url("'+reader.result+'")');
+	})
+	return;
 }
 
 function setBackground(el) {
+	const container = document.getElementById("container");
+	if (el.className == "image") {
+		document.getElementById("backgroundFile").style.opacity = 1.0;
+		container.style.backgroundImage = 'var(--backgroundImage)';
+	} else {
+		document.getElementById("backgroundFile").style.opacity = 0.0;
+		container.style.removeProperty("background-image");
+	}
 	var r = document.querySelector(':root');
 	r.style.setProperty('--background', el.style.backgroundColor);
 	return;
 }
 
+function loadForegroundImage(el) {
+	// https://www.webmound.com/save-images-localstorage-javascript/
+	const reader = new FileReader()
+	reader.readAsDataURL(el.files[0])
+	reader.addEventListener('load', () => {
+		// console.log("loaded image data: " + reader.result);
+		localStorage.setItem('foregroundImage', reader.result)
+		document.querySelector(':root').style.setProperty('--foregroundImage', 'url("'+reader.result+'")');
+	})
+	return;
+}
+
 function setForeground(el) {
-	if (el.style.backgroundColor == "transparent") {
-		var arr = ["#474A52", "#9296A0", "#FFCC2D", "#FF1C52", "#6806CC", "#1E5AF2"];
-		for (const child of document.getElementById("container").children) {
-			child.firstChild.style.backgroundColor = arr.random();
+	if (typeof el == "undefined") {
+		el = document.querySelector('input[name=foreground]:checked');
+	}
+	
+	if (el.className == "image") {
+		// Show load image file button
+		document.getElementById("foregroundFile").style.opacity = 1.0;
+		
+		// Set up image offsets in array
+		var containerRes = size1*tileRes;
+		for (i = 0; i < size1; i++) { // rows
+			for (j = 0; j < size1; j++) { // row elements
+				id = (size0-i).toString().padStart(2, "0") + (j).toString().padStart(2, "0");
+				var pixel = document.getElementById(id).firstChild;
+				pixel.style.backgroundImage = 'var(--foregroundImage)';
+				pixel.style.backgroundSize = containerRes + 'px';
+				pixel.style.backgroundPosition = -j * tileRes + 'px ' + -i * tileRes + 'px';
+			}
 		}
 	} else {
-		for (const child of document.getElementById("container").children) {
-//			child.firstChild.style.backgroundColor = null;
-			child.firstChild.style.removeProperty("background-color");
+		// Hide load image file button
+		document.getElementById("foregroundFile").style.opacity = 0.0;
+		
+		if (el.className == "random") {
+			var arr = gradientArray(el.style.background);
+			for (const child of document.getElementById("container").children) {
+				child.firstChild.style.removeProperty("background-image");
+				child.firstChild.style.backgroundColor = arr.random();
+			}
+		} else {
+			for (const child of document.getElementById("container").children) {
+				child.firstChild.style.removeProperty("background-image");
+				child.firstChild.style.removeProperty("background-color");
+			}
 		}
 	}
+	
 	var r = document.querySelector(':root');
 	r.style.setProperty('--foreground', el.style.backgroundColor);
 	return;
@@ -353,8 +422,6 @@ function dataFromPixels() {
 		}
 		dataArray.push(row);
 	}
-	
-	// console.log("Data updated from pixels");
 
 	variablesToString(); // Update global string based on new global array values
 	updateDisplay(); // Update output display
@@ -398,8 +465,6 @@ function symmetryDiag(id, className) {
 
 function symmetryDiag2(id, className) {
 	var mirror = (size0-id.substring(2, 4)).toString().padStart(2, "0")+(size0-id.substring(0, 2)).toString().padStart(2, "0");
-//	console.log("ID: " + id);
-//	console.log("mirror: " + mirror);
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -704,18 +769,11 @@ function saveImage(el,id) {
 	
 	domtoimage.toPng(source).then(function (dataUrl) {
 		anchor.href = dataUrl;
-		// anchor.download = el.value;
 		anchor.download = dataString;
 		anchor.click();
 	}).catch(function (error) {
 		console.error('dom-to-image failure', error);
 	});
-	
-	// HTML to Image — this seems to implement retina resolutions (images are larger on iPad, but identical on a non-retina desktop display)
-	
-	// htmlToImage.toPng(source).then(function (dataUrl) {
-	// 	download(dataUrl, el.value);
-	// });
 }
 
 function saveVector(el,id) {
@@ -724,7 +782,6 @@ function saveVector(el,id) {
 
 	domtoimage.toSvg(source).then(function (dataUrl) {
 		anchor.href = dataUrl;
-		// anchor.download = el.value; 
 		anchor.download = dataString;
 		anchor.click();
 	}).catch(function (error) {

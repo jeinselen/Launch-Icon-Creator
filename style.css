@@ -12,6 +12,7 @@
 	--foreground: white;
 	--buttonA: 4em;
 	--buttonB: 2em;
+	--buttonB2: 1.9em;
 	--buttonC: 2em;
 	/* Using manual overrides of 100px, 101px, and -1px used to be required in some browsers, unsure now with Safari giving me issues with rendering/downloading */
 	--tileSizeA: 100%;
@@ -19,6 +20,8 @@
 	--tileOffset: 0;
 	--corner: 75%;
 	--cornerUI: 0.25em;
+	--backgroundImage: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAsTAAALEwEAmpwYAAABwklEQVRogdXYQXLdIBAE0O6ZzolzU5/H05MF+vK348ReulVaUAgxvAIEiL/rhbVVrtrqrfZ1c6vd5Wo3p9vN7Z6mm1N0l0U3R5ymG9M1wjamOcII03Bj+qTXV8JTa2Fqp9e9U3bv1LrWbdea65rBNy6tgFcaBRgAUNeTNuZOA3NyGv141W9lAYAnZ4DGAvwrFIF9RDBeF7rL3MEf6QLc+I5B+wtAsEF7tybT8ATINMj9LnqcQVs0NtdwhlCw4Z4DqQa57oiRBm0/tzvPoK0P7Q4zaPu8mmrQEkg2aJuYzTVoiwByDQ9ArOFaiXMN90KWapBJ1OYatE0Pcg3XJM41vH2FQg1y8a4n0XBOZAg2XHMg1iCTVR/rCTJoizZyDec8gFyDhuxGrkFbHCPXcK0DuQYteTakoQa5WYNcg5aINmiK7c01nAMNcg1aluFcg1wsBxuuIZRrkMlTSahBLsDBhuu3Sq5Bc3og1vDUA5mGexKnGjR8RMo0yHyKFGg4PbC5hrsHUg0aENxcg0xggw3C2UnEGnTFiDXoLhlq0HPJRMM7QKLhIyDO8Akgy/A5IMjwT0CK4X+ACMMXgJ9v+Brwww1/ADv8p6IlncjkAAAAAElFTkSuQmCC");
+	--foregroundImage: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAsTAAALEwEAmpwYAAABp0lEQVRogdXYS5KDMAxF0SeVV9jb6jW31ANkYmxDMsxlQPkjKE6BLMDy90cuueQplyx7N17dGux7G4IvAVFTlrLh2KmhqNnXeN8rJcl6wAebK0whhaqRZ9df3Rrs+xyCLwFeU2nK4dipIa/Z13jfyyQpe8AHW1Mchx1ck1Juiiyeoro1eESaPBU9WBoCXB4Kk6si4xpTDVdGXW6N95ObSal0KSR7ex9aXQfWMN4BpOEAgA3nI0Q17JIYZZgeIZ5hfYRghlalB2toiuN6qIaeA1jDkANMw3UZBRqWZZRmOAFUw1gHkIbpVYJnWF8lYIZdDqAMNznAMdznAMTwmAMEQ9Of5mtFGcYkRhqmJOYZ1iSGGbZJTDLcFTKMYVyFkIZpFeIZVgDMsC6jMMN2GSUZziSmGppSaEP/M4c1DH/mmIahkDEN1zoANCyFjGaY3oV4hptKzDHcV2KI4bESEwwPHzQMw/MHDcDw9oPm2w27ZRRl2H6RkQzbO0AyNEloQ6sTYg0dgDUMAKbhCgAaFgDNsAOgDDcAjuEeADE8AgiGd4CvN3wA+G7DP1qqg/ObfD+DAAAAAElFTkSuQmCC");
 }
 
 body {
@@ -108,7 +111,7 @@ p {
 	padding: 0;
 }
 
-input, label, .dimension, .reset, .download {
+input, label, .dimension, .load, .reset, .download {
 	margin: 0;
 	font-size: 1em;
 	line-height: 1.6em;
@@ -165,11 +168,13 @@ input {
 	line-height: var(--buttonB);
 }
 
+/* #grid-colors input[type=radio] { */
 #grid-colors input {
   appearance: none;
 	width: var(--buttonB);
 	height: var(--buttonB);
-	margin: 0 0.25em 0 0;
+	line-height: var(--buttonB2);
+	margin: 0 0.25em 0.25em 0;
 /* 	padding: 1.0em; */
 	outline: none;
   border-radius: var(--cornerUI);
@@ -184,22 +189,76 @@ input {
 	border-color: white;
 }
 
-#grid-colors input.transparent, #grid-colors input.random {
-	border-style: dotted;
-	border-width: 2px;
-}
-
 #grid-colors input.transparent::before {
 	content: "🚫";
+/* 	content: "X"; */
 }
 
 #grid-colors input.random::before {
+/* 	content: "∞"; */
+/* 	content: "♾️"; */
 	content: "🔄";
 }
+
+#grid-colors input.image {
+/* 	background-repeat: no-repeat; */
+	background-position: center;
+	background-size: cover;
+/*   background-attachment: fixed; */
+}
+
+#grid-colors input.image::before {
+/* 	content: "→"; */
+/* 	content: "⤵️"; */
+	content: "📷";
+/* 	content: "🖼️"; */
+/* 	content: "📁"; */
+/* 	content: "📂"; */
+}
+
+#backgroundFile, #foregroundFile {
+	opacity: 0.0;
+	transition-property: opacity;
+	transition-duration: 0.125s;
+	transition-timing-function: ease-out;
+}
+
+#grid-colors input.load {
+	width: 6.5em;
+	line-height: 1.4em;
+}
+
+input[type=file]::file-selector-button {
+/* 	display: none; */
+  border: none;
+/*   padding: 10px 20px; */
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+	content: "sdf";
+	background-color: var(--grey2);
+	color: white;
+}
+
+
 
 .reset {
 	width: 4.9em;
 	margin: 0 0.1em 0 0;
+}
+
+.library {
+	display: inline-block;
+	width: var(--buttonB);
+	height: var(--buttonB);
+	line-height: var(--buttonB2);
+	margin: 0 0.25em 0.25em 0;
+	padding: 0;
+	background-color: black;
+	background-position: center;
+	background-size: cover;
+/* 	border-radius: var(--cornerUI); */
+	outline: none;
+	border: 1px solid black;
 }
 
 .download {
@@ -248,11 +307,32 @@ textarea {
 	z-index: 100;
 }
 
+#container, .background {
+	background-color: var(--background);
+	/* 	background-repeat: no-repeat; */
+	background-position: center;
+	background-size: cover;
+	/*   background-attachment: fixed; */
+	transition: background-color 0.5s;
+}
+
 .a, .b, .c, .d, .e, .f {
 	position: absolute;
 	width: var(--tileSizeA);
 	height: var(--tileSizeA);
 	transform: scale(1.0);
+	
+/* 	Image Background */
+	/* 	background-repeat: no-repeat; */
+	background-position: center;
+	background-size: cover;
+	/*   background-attachment: fixed; */
+	
+/* 	Animations */
+	background-color: var(--foreground);
+	transition-property: border-radius, transform, opacity, background-color;
+	transition-duration: 0.125s;
+	transition-timing-function: ease-out;
 }
 
 .a {
@@ -299,16 +379,4 @@ textarea {
 }
 
 .f {
-}
-
-.background {
-	background-color: var(--background);
-	transition: background-color 0.5s;
-}
-
-.a, .b, .c, .d, .e, .f {
-	background-color: var(--foreground);
-	transition-property: border-radius, transform, opacity, background-color;
-	transition-duration: 0.125s;
-	transition-timing-function: ease-out;
 }

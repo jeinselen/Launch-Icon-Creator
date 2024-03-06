@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
 	<meta charset="UTF-8">
-	<title>Pixel Icon Creator</title>
+	<title>Launch Icon Creator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -24,6 +24,20 @@
 		</div>
 
 		<div id="grid-prefs">
+			<div id="column1">
+				<div id="grid-size">
+					<h2>size:</h2>
+					<p>
+						<div class="flex">
+							<div id="dimension" class="dimension">
+								<div id="canvasDimension" class="readout">5</div>
+								<div id="canvasDecrease" onclick="updateSize('-');">◀︎</div>
+								<div id="canvasIncrease" onclick="updateSize('+');">▶︎</div>
+							</div>
+						</div>
+					</p>
+				</div>
+			
 			<div id="grid-symmetry">
 				<h2>symmetry:</h2>
 				<p>
@@ -44,29 +58,25 @@
 					<label for="symmetryRadial4"><input type="radio" name="symmetry" value="symmetryRadial4" id="symmetryRadial4"> 🔄 radial x4 &nbsp;&nbsp;</label>
 				</p>
 			</div>
+			</div>
 			
 			<div id="grid-column2">
-				<div id="grid-size">
-					<h2>size:</h2>
-					<p>
-						<div class="flex">
-							<div id="dimension" class="dimension">
-								<div id="canvasDimension" class="readout">5</div>
-								<div id="canvasDecrease" onclick="updateSize('-');">◀︎</div>
-								<div id="canvasIncrease" onclick="updateSize('+');">▶︎</div>
-							</div>
-						</div>
-					</p>
-				</div>
-				
 				<div id="grid-colors">
 					<h2>background:</h2>
 					<p>
 						<div class="flex">
-							<input type="radio" name="background" value="0" id="background0" onchange="setBackground(this)" style="background-color: black;" checked>
-							<input type="radio" name="background" value="1" id="background1" onchange="setBackground(this)" style="background-color: #1A1C1E;">
-							<input type="radio" name="background" value="2" id="background2" onchange="setBackground(this)" style="background-color: #2A2A32;">
+							<input type="radio" name="background" value="0" id="background0" onchange="setBackground(this)" style="background-color: black;" class="solid" checked>
+							<input type="radio" name="background" value="1" id="background1" onchange="setBackground(this)" style="background-color: #1A1C1E;" class="solid">
+							<input type="radio" name="background" value="2" id="background2" onchange="setBackground(this)" style="background-color: #2A2A32;" class="solid">
 							<input type="radio" name="background" value="3" id="background3" onchange="setBackground(this)" style="background-color: transparent;" class="transparent">
+						</div>
+						<div class="flex">
+							<input type="radio" name="background" value="4" id="background4" onchange="setBackground(this)" style="background-color: black; background-image: var(--backgroundImage);" class="image">
+							<input type="button" value="load png..." id="backgroundFile" onclick="clickElement('backgroundImage');" class="load" />
+							<div class="loadFileHidden" style="height: 0px;width:0px; overflow:hidden;">
+								<label>Choose PNG File</label>
+								<input type="file" id="backgroundImage" name="backgroundImage" accept="image/jpeg, image/png, image/jpg" onchange="loadBackgroundImage(this)" style="background-color: inherit;">
+							</div>
 						</div>
 					</p>
 				</div>
@@ -75,18 +85,30 @@
 					<h2>foreground:</h2>
 					<p>
 						<div class="flex">
-							<input type="radio" name="foreground" value="4" id="foreground4" onchange="setForeground(this)" style="background-color: #1E5AF2;">
-							<input type="radio" name="foreground" value="5" id="foreground5" onchange="setForeground(this)" style="background-color: #6806CC;">
-							<input type="radio" name="foreground" value="6" id="foreground6" onchange="setForeground(this)" style="background-color: #FF1C52;">
-							<input type="radio" name="foreground" value="7" id="foreground7" onchange="setForeground(this)" style="background-color: #FFCC2D;">
+							<input type="radio" name="foreground" value="0" id="foreground0" onchange="setForeground(this)" style="background-color: white;" class="solid" checked>
+							<input type="radio" name="foreground" value="2" id="foreground1" onchange="setForeground(this)" style="background-color: #9296A0;" class="solid">
+							<input type="radio" name="foreground" value="2" id="foreground2" onchange="setForeground(this)" style="background-color: #474A52;" class="solid">
+							<input type="radio" name="foreground" value="3" id="foreground3" onchange="setForeground(this)" style="background-color: #2A2A32;" class="solid">
 						</div>
-					</p>
-					<p>
 						<div class="flex">
-							<input type="radio" name="foreground" value="0" id="foreground0" onchange="setForeground(this)" style="background-color: white;" checked>
-							<input type="radio" name="foreground" value="2" id="foreground1" onchange="setForeground(this)" style="background-color: #9296A0;">
-							<input type="radio" name="foreground" value="2" id="foreground2" onchange="setForeground(this)" style="background-color: #474A52;">
-							<input type="radio" name="foreground" value="3" id="background3" onclick="setForeground(this)" style="background-color: transparent;" class="random">
+							<input type="radio" name="foreground" value="4" id="foreground4" onchange="setForeground(this)" style="background-color: #1E5AF2;" class="solid">
+							<input type="radio" name="foreground" value="5" id="foreground5" onchange="setForeground(this)" style="background-color: #6806CC;" class="solid">
+							<input type="radio" name="foreground" value="6" id="foreground6" onchange="setForeground(this)" style="background-color: #FF1C52;" class="solid">
+							<input type="radio" name="foreground" value="7" id="foreground7" onchange="setForeground(this)" style="background-color: #FFCC2D;" class="solid">
+						</div>
+						<div class="flex">
+							<input type="radio" name="foreground" value="8" id="background8" onclick="setForeground(this)" style="background-color: black; background: conic-gradient(#1E5AF2, #474A52, #474A52, #9296A0, #9296A0, #FFCC2D, #FFCC2D, #FF1C52, #6806CC, #1E5AF2, #1E5AF2);" class="random">
+							<input type="radio" name="foreground" value="9" id="background9" onclick="setForeground(this)" style="background-color: black; background: conic-gradient(#1E5AF2, #FFCC2D, #FF1C52, #6806CC, #1E5AF2);" class="random">
+							<input type="radio" name="foreground" value="10" id="background10" onclick="setForeground(this)" style="background-color: black; background: conic-gradient(#1E5AF2, #474A52, #9296A0, #1E5AF2);" class="random">
+							<input type="radio" name="foreground" value="11" id="background11" onclick="setForeground(this)" style="background-color: black; background: conic-gradient(#FFCC2D, #FF1C52, #6806CC, #FFCC2D);" class="random">
+						</div>
+						<div class="flex">
+							<input type="radio" name="foreground" value="12" id="background12" onclick="setForeground(this)" style="background-color: black; background-image: var(--foregroundImage);" class="image">
+							<input type="button" value="load png..." id="foregroundFile" onclick="clickElement('foregroundImage');" class="load" />
+							<div class="loadFileHidden" style="height: 0px;width:0px; overflow:hidden;">
+								<label>Choose PNG File</label>
+								<input type="file" id="foregroundImage" name="foregroundImage" accept="image/jpeg, image/png, image/jpg" onchange="loadForegroundImage(this)" style="background-color: inherit;">
+							</div>
 						</div>
 					</p>
 				</div>
@@ -103,6 +125,24 @@
 				<input type="button" value="logo" onclick="setData('05x05=afcaa-fafaa-faffc-faaaf-efffa');" class="reset" />
 			</p>
 			<p>
+				<div onclick="setData('05x05=afcaa-fafaa-faffc-faaaf-efffa');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAIVBMVEUAAAD////39/fNzc1ycnIICAjT09MdHR1xcXHMzMz4+PioMsJJAAAAZElEQVR42u3SOQ6AMBAEwR3sXR//fzCREYeQWxYhnU6FYyMdbSm7vadzUSBUOISqFDYKO4Vah/fhh9/C6z8BHP9kUOEQqlLYKOwUahU++yGEk2yEYaewUVgp9IDQSkBontM2hzvvCQQaa7tvRQAAAABJRU5ErkJggg==');"> </div>
+				<div onclick="setData('05x05=aaafc-aaaaf-fffaf-aaaaf-aaafd');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEUAAAD////39/fNzc1ycnIICAjT09MdHR1xcXHMzMz4+PioMsJJAAAARElEQVR4AWNABoIgoOzKgCkoKFaARVAwFZugBDZBSWyCUtgEBfEJIsBgFRREAoNUcCiFJ8kphHACkyQ60aYSygiILAMA27YXS/LAC8gAAAAASUVORK5CYII=');"> </div>
+				<div onclick="setData('05x05=aabfa-baaaa-faaaf-aaaad-afdaa');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAIVBMVEUAAAAICAhycnLNzc339/f///8dHR3T09NxcXHMzMz4+PgJzrleAAAAb0lEQVR42u3UMQoAIQxEUaOOUe9/4G10G1n8IFjt7wKvmiJhzWLKegufFZcEoLkYrIKwUdgp1DGcu81rsxuA5mKwCsJGYadQ16FGP2TzXYedwkZhhdCNQS8BwJyi8Q9xDjuFjcIKoRuDXsIWjt2WHnZ5CdFxmOVzAAAAAElFTkSuQmCC');"> </div>
+				<div onclick="setData('05x05=aafaa-aadaa-fcaef-aabaa-aafaa');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEUAAAD////4+PjMzMxxcXHT09MICAgdHR339/fNzc1ycnJfym4bAAAAaUlEQVR4AWOAAUEggLGHjaAQNkFhbIIi2ATDsAiKFmAKdi5DdQpMQBAKwAyQVgxBmCWKyIIw5xgiC8Ic7ogsCPNiKrIgLDDYA7EIMmTNQLBhAii+gWrFFEzFFsiO2AQNsQkqDsMEhhAEAPw3F8fhOcdiAAAAAElFTkSuQmCC');"> </div>
+				<div onclick="setData('05x05=aafaa-abffa-ffaff-affda-aafaa');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEUAAAD///8ICAhycnLNzc339/cdHR3T09NxcXHMzMz4+PgrNRflAAAAT0lEQVR4AWOAAUEggLEHraCyqyAUICTYCgUxBdUFsQg2YhOciE1wITZBQaIEERwEezAKgjnkeFMKm6AkNkEJbIJFWATFEzAFQ4zA/KGSPgG8QRzCX9to1QAAAABJRU5ErkJggg==');"> </div>
+				<div onclick="setData('05x05=abaca-bfafc-aaaaa-efafd-aeada');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEUAAAAICAhycnLNzc339/f///8dHR3T09NxcXHMzMz4+PgJzrleAAAAh0lEQVR4AWIAAyGTUBAV6qzIAAdspYDq6ZuAoRAIwPC5QBl1igVEIAEJ6EwP9c8r47vxW67rD2p7q6j0D3WsmBq6irmhr1gahoq6oUasNfb4qvVV44ivWpWeUUdJKzrJK3opKwbRK2rGi8SJjnAgNDocMq4DF0crPnUhfGB4inC0cN78CPgyDwK4fFH7kHFWAAAAAElFTkSuQmCC');"> </div>
+				<div onclick="setData('05x05=acaba-efffd-afafa-bfffc-adaea');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEUAAAD////39/fNzc1ycnIICAjT09MdHR1xcXHMzMz4+PioMsJJAAAAhklEQVR4AWIAAUFlVwYwCDESBFEQQUGxAhDNnghonoyNAAahEDoDnTpYNnCQjJAR3DRH5yevSCkNd6/6IGqHmvZLFTb7HbDbn4DDvgJqd4YCMVxfNnxGqvvgVHO01HQJVS7HdRW5Rk50IKTjKSYWgtVxyfgcAjH8nwgHxlPk0fK84SPAl3kBGogvjdDemS4AAAAASUVORK5CYII=');"> </div>
+				<div onclick="setData('05x05=afcaa-faaaa-eaaac-aaaaf-aaefa');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEUAAAD////39/fNzc1ycnIICAjT09MdHR1xcXHMzMz4+PioMsJJAAAAbklEQVR4AdXSsQ2AIBCF4euorzFA6wbu4AaGnoLeFRiBEdhUr1BN3gs9r7uv/HNiU9u6y7MPdTkJamHoGQaGkaGO8X/MhNYV0bp2QC3SEL1UxCAJMYrLgPd9bIZzp+RfwrAzbAwrw8TQZUTr+uIFcJcXx9Vv12EAAAAASUVORK5CYII=');"> </div>
+				<div onclick="setData('05x05=babac-fafaa-faefd-faaaa-efffd');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEX///8AAAAICAjT09PNzc1xcXHMzMz39/dycnIdHR34+PhCNNtAAAAAiklEQVR4Xs3RrQ3EMBCE0U+KbBBmGGxyMHITR13CFnEVXAfpwKXen70DLJ0CM2S0D86SbnfSO6N5PBPbzhdHw3KQ+eFooFA7VmHAOpow0jo24Qp+qE9gz7VR+Y9NoEFMGB2rMDhmYXHc9mHLAeAvBvi8WKhcEs+nzbRiM0bqjIE8Y0E7ak98R/A9X2PfI9eHWkJJAAAAAElFTkSuQmCC');"> </div>
+				<div onclick="setData('05x05=bcabc-eaaad-aafaa-baaac-edaed');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEUAAAAICAhycnLNzc339/f///8dHR3T09NxcXHMzMz4+PgJzrleAAAAkElEQVR4AWJgEDIJDXVWZAACBJutNBQIAM2TsQ3EIBRD2YLJEEDFCgzBCIzAniffjywl35Eo4+rpVWBM7nDkmP4ZkORpUCDJy6BCkrdBgySnK5BkLU0w73J72cLysobpZQnRy4ESHjJ31HWTrJFHYT4o1eHVNXUhsjpZsnyO49c8X4gcmJyiHK2et/wI6sv8ANTIhVk3e8/uAAAAAElFTkSuQmCC');"> </div>
+				<div onclick="setData('05x05=bfafc-faaaf-fafaf-faaaf-efafd');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEUAAAAICAhycnLNzc339/f///8dHR3T09NxcXHMzMz4+PgJzrleAAAAXElEQVR4AWNgEDIJBQEGIAAznBUZGNhKQ1EFQ8MTGMRD0QVDCxlaMQUjGKZiCkYyLMUUjAIyMARDcQsyIIFBLgimB6ngUApP4lMI1gSGNSliTbRYkzfWjIA1ywAA7qSdyfJ6rdoAAAAASUVORK5CYII=');"> </div>
+				<div onclick="setData('05x05=bffac-aaaaf-fafaf-faaaa-eaffd');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEX///8AAAAICAjT09PNzc1xcXHMzMz39/dycnIdHR34+PhCNNtAAAAAZ0lEQVR4Xs3OoRHEIBQG4Z1hiIh7MhqDzNAElhIoIhWkAzqg1DtzgvdfAaz81GK58su+8bzGdbMiYZDwSKEpRrriwVQ8QZH/aK4NUaa3R9fOiEtxKp50xYOmGEmKhev2GAaW64rPax9mrSG995uHZwAAAABJRU5ErkJggg==');"> </div>
+				<div onclick="setData('05x05=bfffc-aaaaa-fafaf-fafaf-eafad');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAIVBMVEUAAAAICAhycnLNzc339/f///8dHR3T09NxcXHMzMz4+PgJzrleAAAAXklEQVR42u3VMQ6AMAxDUYc2dZL7HxgGOkI9sCD1b5bebgB2tO4v9XYYrgZ9GQdgdCEawqUCqcFEabDgYjrcfZPfrfaGG/4TlgYLqcFEaDBgVCANGFxDDsz7eITzPk4X/xFRW+qX2wAAAABJRU5ErkJggg==');"> </div>
+				<div onclick="setData('05x05=bfffc-faaaf-fabff-aafaa-aafaa');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEUAAAAICAhycnLNzc339/f///8dHR3T09NxcXHMzMz4+PgJzrleAAAAWUlEQVR4AWNgEDIJRQHOigwMbKWhaCA8gUE8FAMUMrRiCkYwTMUUjGRYiikYxRCKBeAWZEACg1wQEa4IQXC4YgqKY/NmKzbBqdgEl2ITDCUoCAPIHLIFRwUBfD6I75apfI8AAAAASUVORK5CYII=');"> </div>
+				<div onclick="setData('05x05=fcabf-afafa-afafa-afafa-fdaef');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAIVBMVEX////39/fNzc1ycnIICAgAAADT09MdHR1xcXHMzMz4+PhaiUGjAAAAVUlEQVR4AWMAAyGTUDBwVmRAAmylILHwBAYUkAISdGNABRwgwQY0QU6Q4AQ0QS6Q4AIGNAASZMAhiOCg08NfcFSQcAohlMAQSZFwokUkb7wZATPLAAAcbX7XtG9HVwAAAABJRU5ErkJggg==');"> </div>
+				<div onclick="setData('05x05=fcafc-afaaf-aaaaa-fcafc-afaaf');" class="library" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAAAAACpleexAAAAWElEQVR42mP4DwffzxZxMMABhvh/ZHBZFotCqPh/VBEOrApB4qgC/wuxK/xfiC5wBofCM+gCP3Ao/IEu8B+Hwv/EK0SXYEADowpJUzgKKAOj+Xo0Xw8ihQDhMd5PQjY7SAAAAABJRU5ErkJggg==');"> </div>
+			</p>
+			<p>
 				<textarea id="outputString" rows="4" cols="32" onClick="this.select();" onChange="setData(this.value)"></textarea>
 			</p>
 			<p>
@@ -117,15 +157,13 @@
 
 	<div id="grid-artwork">
 		<div id="placement">
-			<div id="container" class="background"></div>
+			<div id="container" class="background" style="background-image: none;"></div>
 		</div>
 	</div>
 </div>
 <!-- partial -->
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js'></script><script	src="./script.js"></script>
+	<script	src="./script.js"></script>
 
 </body>
 </html>
