@@ -46,15 +46,10 @@
 					<h2>canvas:</h2>
 					<p>
 						<div class="flex">
-							<div id="xdimension" class="dimension">
-								<div id="xvalue" class="readout">5</div>
-								<div id="xa" onclick="updateX('-');">◀︎</div>
-								<div id="xb" onclick="updateX('+');">▶︎</div>
-							</div>
-							<div id="ydimension" class="dimension">
-								<div id="yvalue" class="readout">5</div>
-								<div id="ya" onclick="updateY('-');">▼</div>
-								<div id="yb" onclick="updateY('+');">▲</div>
+							<div id="dimension" class="dimension">
+								<div id="canvasDimension" class="readout">5</div>
+								<div id="canvasDecrease" onclick="updateSize('-');">◀︎</div>
+								<div id="canvasIncrease" onclick="updateSize('+');">▶︎</div>
 							</div>
 						</div>
 					</p>
@@ -75,17 +70,20 @@
 		<div id="grid-data">
 			<h2>data:</h2>
 			<p>
-				<input type="button" value="clear" onclick="setArray('a');" class="reset" />
-				<input type="button" value="fill" onclick="setArray('f');" class="reset" />
-				<input type="button" value="random" onclick="setArray('rand');" class="reset" />
-				<input type="button" value="logo" onclick="setArray('5x5=afcaa-fafaa-faffc-faaaf-efffa');" class="reset" />
+				<input type="button" value="clear" onclick="setData('a');" class="reset" />
+				<input type="button" value="fill" onclick="setData('f');" class="reset" />
+				<input type="button" value="random" onclick="setData('rand');" class="reset" />
+				<input type="button" value="logo" onclick="setData('5x5=afcaa-fafaa-faffc-faaaf-efffa');" class="reset" />
 			</p>
 			<p>
-				<textarea id="outputString" rows="4" cols="32" onClick="this.select();" onChange="setArray(this.value)"></textarea>
+				<textarea id="outputString" rows="4" cols="32" onClick="this.select();" onChange="setData(this.value)"></textarea>
 			</p>
 			<p>
 				<input id="image" type="button" value="download image" onclick="saveImage(this,'container');" class="download" />
 				<a id="download" href=""></a>
+			</p>
+			<p>
+				<input type="button" value="log vars" onclick="logVariables(this);" class="reset" />
 			</p>
 		</div>
 	</div>

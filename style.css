@@ -152,14 +152,14 @@ input {
 	text-align: center;
 }
 
-#xa, #xb, #ya, #yb {
+#canvasDecrease, #canvasIncrease {
 	position: absolute;
 	text-align: center;
 /* 	background: rgba(255, 0, 0, 0.2); */
 	cursor: pointer;
 }
 
-#xa {
+#canvasDecrease {
 	top: 0;
 	left: 0;
 	text-align: left;
@@ -168,31 +168,13 @@ input {
 	line-height: var(--buttonA);
 }
 
-#xb {
+#canvasIncrease {
 	top: 0;
 	right: 0;
 	text-align: right;
 	width: var(--buttonB);
 	height: var(--buttonA);
 	line-height: var(--buttonA);
-}
-
-#ya {
-	bottom: 0;
-	left: 0;
-	width: var(--buttonA);
-	height: var(--buttonB);
-/* 	line-height: var(--buttonB); */
-	line-height: 3em;
-}
-
-#yb {
-	top: 0;
-	left: 0;
-	width: var(--buttonA);
-	height: var(--buttonB);
-/* 	line-height: var(--buttonB); */
-	line-height: 1em;
 }
 
 #grid-colors input {
@@ -270,10 +252,13 @@ textarea {
 	position: absolute;
 	width: var(--tileSizeA);
 	height: var(--tileSizeA);
+	transform: scale(1.0);
 }
 
 .a {
-	opacity: 0;
+	transform: scale(0.0);
+	border-radius: 500%;
+/* 	opacity: 0; */
 }
 
 .b, .c, .d, .e {
@@ -324,10 +309,13 @@ textarea {
 
 .background {
 	background-color: var(--background);
-	transition: background-color 1s;
+	transition: background-color 0.5s;
 }
 
 .a, .b, .c, .d, .e, .f {
 	background-color: var(--foreground);
-	transition: border-radius 0.15s, opacity 0.25s, background-color 0.35s;
+/* 	transition: border-radius 0.25s, transform 0.25s, opacity 0.25s, background-color 0.25s; */
+	transition-property: border-radius, transform, opacity, background-color;
+	transition-duration: 0.125s;
+	transition-timing-function: ease-out;
 }

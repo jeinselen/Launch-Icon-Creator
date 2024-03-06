@@ -1,18 +1,25 @@
 // Global variables
 var tileRes = 128;
+var placementSize = 500;
+// var placementScale = 1.0;
 var dataString = "5x5=afcaa-fafaa-faffc-faaaf-efffa";
 var dataArray = [["a","f","c","a","a"],["f","a","f","a","a"],["f","a","f","f","c"],["f","a","a","a","f"],["e","f","f","f","a"]];
-// var size1 = 5;
-// var size0 = 4;
-var Xa = 5;
-var Xb = 4;
-var Ya = 5;
-var Yb = 4;
-var outdated = false;
+var size1 = 5;
+var size0 = 4;
 
-// String to array size and data processing functions
+function logVariables(input) {
+	// console.log("tileRes: "+tileRes+"\nplacementSize: "+placementSize+"\ndataString: "+dataString+"\ndataArray: "+dataArray+"\nsize1: "+size1+"\nsize0: "+size0);
+	console.log(input+"    tileRes: "+tileRes+"    placementSize: "+placementSize+"    dataString: "+dataString+"    dataArray: "+dataArray+"    size1: "+size1+"    size0: "+size0);
+}
+
+
+
+
+
+// Update variables based on string
 function stringToVariables(str) {
-	if (str.length >= 5) { // Minimum viable string: "1x1=a"
+	// Update or use global string (minimum viable string: "1x1=a")
+	if (str.length >= 5) {
 		dataString = str; // Replace current global string variable
 	} else {
 		str = dataString; // Get current global string variable
@@ -21,171 +28,242 @@ function stringToVariables(str) {
 	var [size, data] = str.split("="); // Split canvas size and content data
 	
 	var [X, Y] = size.split("x"); // Get X/Y dimensions
-	if (Xa != X) {
-		Xa = X;
-		Xb = X-1;
-		outdated = true;
-	} else if (Ya != Y) {
-		Ya = Y;
-		Yb = Y-1;
-		outdated = true;
+	// Only X is currently used, simplifying calculation of canvas sizes and ensuring mirror modes work reliably
+	if (size1 != X) {
+		size1 = X;
+		size0 = X-1;
 	}
 	data = data.split("-"); // Split data into rows
 	for(var i = 0; i < data.length; i++) {
 		data[i] = data[i].split(""); // Split each row into individual characters
 	}
 	
+	// Update global array
 	dataArray = data;
+	
 	// console.log("Variables updated from string");
 	return;
 }
 
+// Update string based on variables
 function variablesToString() {
-	var string = Xa + "x" + Ya + "=";
+	// Use global data
+	var string = size1 + "x" + size1 + "=";
 	arr = []
-	for (const row of dataArray) {
+	// console.log("dataArray: "+dataArray);
+	for (var row of dataArray) {
+		// console.log("row: "+row);
 		arr.push(row.join(''))
 	}
 	string += arr.join('-')
 	
+	// Update global string
 	dataString = string;
+	
 	// console.log("String updated from variables");
 	return;
 }
 
-function updateX(data) {
-	if (data == "-" && Xa >= 5) {
-		Xa -= 2;
-		Xb -= 2;
-		resizeData("X-");
-	} else if (data == "+" && Xa <= 13) {
-		Xa += 2;
-		Xb += 2;
-		resizeData("X+");
-	}
-	// console.log("X size updated");
-	return;
-}
 
-function updateY(data) {
-	if (data == "-" && Ya >= 5) {
-		Ya -= 2;
-		Yb -= 2;
-		resizeData("Y-");
-	} else if (data == "+" && Ya <= 13) {
-		Ya += 2;
-		Yb += 2;
-		resizeData("Y+");
-	}
-	// console.log("Y size updated");
-	return;
-}
 
-function resizeData(data) {
-	// Expand or contract each row
-	if (data == "X-" || dataArray[0].length > Xa) {
-		for (i = 0; i < dataArray.length; i++) {
-			dataArray[i].shift(); // Remove first element
-			dataArray[i].pop(); // Remove last element
-			// dataArray[i].splice(0, 1);
-			// dataArray[i].splice(-1, 1);
-		}
-	} else if (data == "X+" || dataArray[0].length < Xa) {
-		for (i = 0; i < dataArray.length; i++) {
-			dataArray[i].unshift("a"); // Add to beginning
-			dataArray[i].push("a"); // Add to end
-		}
-	}
-	
-	// Expand or contract the number of rows (assumes )
-	if (data == "Y-" || dataArray.length > Ya) {
-		dataArray.shift(); // Remove first element
-		dataArray.pop(); // Remove last element
-		// dataArray.splice(0, 1);
-		// dataArray.splice(-1, 1);
-	} else if (data == "Y+" || dataArray.length < Ya) {
-		var row = Array(Xa).fill("a");
-		dataArray.unshift(row); // Add to beginning
-		dataArray.push(row); // Add to end
-	}
-	// Update string data as well
-	variablesToString();
-	
-	createArray();
-	// console.log("Array expanded/contracted");
-	return;
-}
 
-function createArray() {
-	var container = document.getElementById('container');
-	container.innerHTML = ''; // Remove any previous content
-	container.style.width = Xa*tileRes+'px';
-	container.style.height = Ya*tileRes+'px';
-	
-	var id = '00';
-	var style = '';
-	var content = '';
-	for (i = 0; i < Xa; i++) {
-		for (j = 0; j < Ya; j++) {
-			id = (Xb-i).toString() + (j).toString();
-			style = 'style="width: '+tileRes+'px; height: '+tileRes+'px; top: '+(i)*tileRes+'px; left: '+(j)*tileRes+'px;"';
-			content += '<div id="'+id+'" class="pixel" '+style+' onclick="pixelSwitch(this,event)">';
-			// content += '<div class="' + dataArray[i][j] + '"></div>'; // Get class from dataArray global variable
-			content += '<div class=""></div>'; // Fill with empty elements, relying on setArray() to complete processing
-			content += "</div>";
-		}
-	}
-	document.getElementById("container").innerHTML = content;
-	outdated = false;
-	
-	setArray();
-	// dataFromPixels();
-	// console.log("Create Array completed");
-	return;
-}
 
-// Set dataArray variable and trigger update
-function setArray(str) {
-	// If presumably valid string is provided, update global variables (shortest possible string: "1x1=a")
+// Start of the processing chain
+// Replace content with fill, random, or preset string
+function setData(str) {
+	// If string is provided, update global variables (shortest possible string: "1x1=a")
+	// Danger: assumes string is valid (there is no validation process)
 	if (str && str.length >= 5) {
 		dataString = str;
 		stringToVariables(str);
-		if (outdated) { resizeData(); }
+	
 	// If "rand" is specified, generate random values
 	} else if (str && str == "rand") {
 		var char = ["a","a","a","a","b","c","d","e","f","f","f","f"]; // Control population frequency by adding duplicate members
 		dataArray = []; // Empty current array
 		var row = [];
-		for (i = 0; i < Ya; i++) {
-			for (j = 0; j < Xa; j++) {
+		for (i = 0; i < size1; i++) {
+			for (j = 0; j < size1; j++) {
 				row.push(char[Math.floor(Math.random() * char.length)]) // Add random character to row
 			}
 			dataArray.push(row) // Add row to array
 			row = []; // Reset row
 		}
 		variablesToString(); // Update string data
+	
 	// If single character is provided, fill entire space with that character
 	} else if (str && str.length == 1) {
-		dataArray = Array(Xa).fill(str) // Create row (horizontal)
-		dataArray = Array(Ya).fill(dataArray) // Populate rows (vertical)
+		dataArray = Array(size1).fill(str) // Create row (horizontal)
+		dataArray = Array(size1).fill(dataArray) // Populate rows (vertical)
 		variablesToString(); // Update string data
 	}
+	
+	logVariables("0");
+	
+	updateSize();
+	return;
+}
+
+// Increase/decrease canvas size variables, clamp to valid range
+function updateSize(input) {
+	if (input == "-") {
+		size1 -= 2;
+	} else if (input == "+") {
+		size1 += 2;
+	}
+	
+	// Clamp and validate size (must be odd integer)
+	if (size1 >= 19) {
+		size1 = 19;
+	} else if (size1 <= 3) {
+		size1 = 3;
+	}	else {
+		size1 = parseInt((parseInt(size1)+1)*0.5)*2-1;
+	}
+	
+	// Update 0 based size value
+	size0 = size1-1;
+	
+	logVariables("1");
+	
+	resizeData();
+	return;
+}
+
+// Update data array based on new size definition or increment/decrement
+function resizeData(input) {
+	var sizeX = dataArray[0].length;
+	var sizeY = dataArray.length;
+	var sizeDiffX = Math.abs(size1-sizeX);
+	var sizeDiffY = Math.abs(size1-sizeY);
+	var sizeValX = sizeDiffX*0.5;
+	var sizeValY = sizeDiffY*0.5;
+	
+	// logVariables("2");
+	console.log("2    sizeX: "+sizeX+"    sizeY: "+sizeY+"    sizeDiffX: "+sizeDiffX+"    sizeDiffY: "+sizeDiffY+"    sizeValX: "+sizeValX+"    sizeValY: "+sizeValY);
+	
+	if (sizeY > size1) {
+		console.log("Reduce columns");
+		// Remove rows
+		dataArray.splice(0, sizeValY);
+		dataArray.splice(-1, sizeValY);
+	}
+	
+	if (sizeX > size1) {
+		console.log("Reduce rows");
+		// Remove elements in rows
+		for (i = 0; i < dataArray.length; i++) {
+			dataArray[i].splice(0, sizeValX);
+			dataArray[i].splice(-1, sizeValX);
+		}
+	}
+	
+	if (sizeX < size1) {
+		console.log("Expand rows");
+		// Add elements in rows
+		var addArray = Array(sizeValX).fill("a");
+		for (i = 0; i < dataArray.length; i++) {
+			dataArray[i] = addArray.concat(dataArray[i], addArray);
+		}
+	}
+	
+	if (sizeY < size1) {
+		console.log("Expand columns");
+		// Add rows
+		var row = Array(size1).fill("a");
+		console.log("row: "+row);
+		var rows = Array(sizeValY).fill(row);
+		console.log("rows: "+rows);
+		dataArray = [].concat(rows, dataArray, rows);
+		
+		// var rows = Array.from({ length:rows }, () => (Array.from({ length:columns }, ()=> "a")))
+		// dataArray = [].concat(rows, dataArray, rows);
+	}
+	
+	var sizeX = dataArray[0].length;
+	var sizeY = dataArray.length;
+	var sizeDiffX = Math.abs(size1-sizeX);
+	var sizeDiffY = Math.abs(size1-sizeY);
+	var sizeValX = sizeDiffX*0.5;
+	var sizeValY = sizeDiffY*0.5;
+	console.log("2    sizeX: "+sizeX+"    sizeY: "+sizeY+"    sizeDiffX: "+sizeDiffX+"    sizeDiffY: "+sizeDiffY+"    sizeValX: "+sizeValX+"    sizeValY: "+sizeValY);
+
+	// Update string data
+	variablesToString();
+	
+	logVariables("2");
+	
+	createArray();
+	return;
+}
+
+// Create canvas of pixel elements
+function createArray() {
+	// Get placement and container elements, reset content, set size and scale
+	// Maybe don't enable placement changes till the mouse interactions are figured out for scaled values?
+	// var placement = document.getElementById('placement');
+	var container = document.getElementById('container');
+	container.innerHTML = ''; // Remove any previous content
+	var containerRes = size1*tileRes
+	// var placementScale = placementSize / containerRes;
+	// placement.style.transform = "scale("+placementScale+")";
+	container.style.width = containerRes+'px';
+	container.style.height = containerRes+'px';
+	
+	// Create individual pixel elements
+	var id = '';
+	var style = '';
+	var content = '';
+	for (i = 0; i < size1; i++) {
+		for (j = 0; j < size1; j++) {
+			// Define element settings
+			id = (size0-i).toString() + (j).toString();
+			style = 'style="width: '+tileRes+'px; height: '+tileRes+'px; top: '+(i)*tileRes+'px; left: '+(j)*tileRes+'px;"';
+			// Add elements to content collection
+			content += '<div id="'+id+'" class="pixel" '+style+' onclick="pixelSwitch(this,event)">';
+			content += '<div class="a"></div>'; // Fill with empty elements, relying on setArray() to complete processing
+			content += "</div>";
+		}
+	}
+	document.getElementById("container").innerHTML = content;
+	
+	logVariables("3");
+	
+	setArray();
+	return;
+}
+
+// Set canvas pixel element styles
+function setArray(str) {
 	// If no string is provided, the existing global variable will be used
 	
 	// Set individual pixel elements
-	var id = '00';
-	for (i = 0; i < Xa; i++) {
-		for (j = 0; j < Ya; j++) {
-			id = (Xb-i).toString() + (j).toString();
+	var id = '';
+	for (i = 0; i < size1; i++) { // rows
+		for (j = 0; j < size1; j++) { // row elements
+			id = (size0-i).toString() + (j).toString();
+			// console.log("element ID: "+id);
+			// console.log("array: "+dataArray[i][j]);
 			document.getElementById(id).firstChild.className = dataArray[i][j];
 		}
 	}
-	updateDisplay(); // Update output display (bypass data from pixels since we've already updated the pixels from the data)
-	// console.log("Set Array completed");
+	
+	logVariables("4");
+	
+	updateDisplay();
+	return;
+}
+
+function updateDisplay() {
+	document.getElementById("canvasDimension").innerHTML = size1;
+	document.getElementById("outputString").value = dataString;
+	
+	logVariables("5");
 	return;
 }
 
 // Trigger default array creation on page load
+// updateSize();
 createArray();
 
 
@@ -239,10 +317,10 @@ function dataFromPixels() {
 	var id = "";
 	var char = "";
 	dataArray = []; // Clear current data array
-	for (i = 0; i < Xa; i++) {
+	for (i = 0; i < size1; i++) {
 		var row = [];
-		for (j = 0; j < Ya; j++) {
-			id = (Xb-i).toString() + (j).toString();
+		for (j = 0; j < size1; j++) {
+			id = (size0-i).toString() + (j).toString();
 			char = document.getElementById(id).firstChild.className;
 			row.push(char);
 		}
@@ -290,7 +368,7 @@ function symmetryDiag(id, className) {
 }
 
 function symmetryDiag2(id, className) {
-	var mirror = (Yb-id.charAt(1)).toString()+(Xb-id.charAt(0)).toString();
+	var mirror = (size0-id.charAt(1)).toString()+(size0-id.charAt(0)).toString();
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -320,7 +398,7 @@ function symmetryDiag2(id, className) {
 }
 
 function symmetryX(id, className) {
-	var mirror = (id.charAt(0)).toString()+(Yb-id.charAt(1)).toString();
+	var mirror = (id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -350,7 +428,7 @@ function symmetryX(id, className) {
 }
 
 function symmetryY(id, className) {
-	var mirror = (Xb-id.charAt(0)).toString()+(id.charAt(1)).toString();
+	var mirror = (size0-id.charAt(0)).toString()+(id.charAt(1)).toString();
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -380,7 +458,7 @@ function symmetryY(id, className) {
 }
 
 function symmetryMirror(id, className) {
-	var mirror = (Xb-id.charAt(0)).toString()+(Yb-id.charAt(1)).toString();
+	var mirror = (size0-id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -432,12 +510,6 @@ function setForeground(hex) {
 
 
 // Data outputs
-
-function updateDisplay() {
-	document.getElementById("xvalue").innerHTML = Xa;
-	document.getElementById("yvalue").innerHTML = Ya;
-	document.getElementById("outputString").value = dataString; // Update output display
-}
 
 function saveImage(el,id) {
 	var source = document.getElementById(id);
