@@ -13,9 +13,9 @@
 		<div id="grid-intro">
 			<h1>Pixel Logo Creator</h1>
 			<p>
-				click a grid element to change it<br />
-				• centre toggles filled and empty<br />
-				• corners set a quarter circle<br />
+				click a grid element to change it:<br />
+				• centre toggles the fill status<br />
+				• corners set a quarter radius<br />
 			</p>
 		</div>
 
@@ -33,11 +33,19 @@
 					<br />
 					<label for="symmetryY"><input type="radio" name="symmetry" value="symmetryY" id="symmetryY"> Y mirror &nbsp;&nbsp;</label>
 					<br />
-					<label for="symmetryMirror"><input type="radio" name="symmetry" value="symmetryMirror" id="symmetryMirror"> ~ radial &nbsp;&nbsp;</label>
+					<label for="symmetryMirror"><input type="radio" name="symmetry" value="symmetryMirror" id="symmetryMirror"> O radial &nbsp;&nbsp;</label>
 				</p>
 			</div>
 
 			<div id="grid-column2">
+				<div id="grid-corners">
+					<h2>corners:</h2>
+					</p>
+						<input type="button" value="" style="border-top-right-radius: 75%;" onclick="setCorner('75%');" class="button" />
+						<input type="button" value="" style="border-top-right-radius: 100%;" onclick="setCorner('100%');" class="button" />
+					</p>
+				</div>
+
 				<div id="grid-colors">
 					<h2>colors:</h2>
 					<p>
@@ -46,25 +54,17 @@
 						<input type="color" name="background-color" id="background-color" value="#000000" onchange="setBackground(this.value)"/><input type="color" name="background-color" id="background-color" value="#ffffff" onchange="setForeground(this.value)" />
 					</p>
 				</div>
-
-				<div id="grid-corners">
-					<h2>corners:</h2>
-					<p>
-						<input type="button" value="" style="border-top-right-radius: 75%;" onclick="setCorner('75%');" class="button" />
-						<input type="button" value="" style="border-top-right-radius: 100%;" onclick="setCorner('100%');" class="button" />
-					</p>
-				</div>
 			</div>
 		</div>
 
 		<div id="grid-reset">
 			<h2>reset:</h2>
 			<p>
-				<input type="button" value="empty" onclick="setArray('fffff-fffff-fffff-fffff-fffff');" class="reset" />
-				<input type="button" value="full" onclick="setArray('aaaaa-aaaaa-aaaaa-aaaaa-aaaaa');" class="reset" />
+				<input type="button" value="empty" onclick="setArray('aaaaa-aaaaa-aaaaa-aaaaa-aaaaa');" class="reset" />
+				<input type="button" value="full" onclick="setArray('fffff-fffff-fffff-fffff-fffff');" class="reset" />
 				<input type="button" value="random" onclick="setRandom();" class="reset" />
-				<input type="button" value="logo" onclick="setArray('facff-afaff-afaac-afffa-eaaaf');" class="reset" />
-				<input type="button" value="custom" onclick="setArray(prompt('please enter data string:', 'fbaff-bfaff-afaaa-afffd-aaadf'));" class="reset" />
+				<input type="button" value="logo" onclick="setArray('afcaa-fafaa-faffc-faaaf-efffa');" class="reset" />
+				<input type="button" value="custom" onclick="setArray(prompt('please enter data string:', 'abfaa-bafaa-fafff-faaad-fffda'));" class="reset" />
 			</p>
 		</div>
 
@@ -81,6 +81,12 @@
 				<textarea id="outputString" rows="1" cols="32" onClick="this.select();"></textarea>
 				<br />
 				<textarea id="outputArray" rows="7" cols="32" onClick="this.select();"></textarea>
+			</p>
+		</div>
+
+		<div>
+			<p>
+				Note: v2 swaps "A" and "F" usage
 			</p>
 		</div>
 	</div>

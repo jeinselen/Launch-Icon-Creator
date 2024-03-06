@@ -1,3 +1,10 @@
+// Global Variables
+var Xa = 5;
+var Xb = 4;
+var Ya = 5;
+var Yb = 4;
+
+// Array Functions
 function createArray(data) {
 	if (!data) {
 		return;
@@ -9,9 +16,9 @@ function createArray(data) {
 	var style = '';
 	var content = '';
 
-	for (i = 0; i < 5; i++) {
-		for (j = 0; j < 5; j++) {
-			id = (4-i).toString() + (j).toString();
+	for (i = 0; i < Xa; i++) {
+		for (j = 0; j < Ya; j++) {
+			id = (Xb-i).toString() + (j).toString();
 			style = 'style="top: '+(i+1)*100+'px; left: '+(j+1)*100+'px;"';
 			content += '<div id="'+id+'" class="pixel" '+style+' onclick="pixelSwitch(this,event)">';
 			//content += id.toString();
@@ -39,9 +46,9 @@ function setArray(data) {
 		data = convertArray(data);
 	}
 	var id = '00';
-	for (i = 0; i < 5; i++) {
-		for (j = 0; j < 5; j++) {
-			id = (4-i).toString() + (j).toString();
+	for (i = 0; i < Xa; i++) {
+		for (j = 0; j < Ya; j++) {
+			id = (Xb-i).toString() + (j).toString();
 			document.getElementById(id).firstChild.className = data[i][j];
 		}
 	}
@@ -50,12 +57,12 @@ function setArray(data) {
 }
 
 function setRandom() {
-	var a = ["a","b","c","d","e","f"];
+	var a = ["a","a","a","a","a","b","c","d","e","f","f","f"];
 	var r = 0;
 	var s = "";
-	for (let i = 0; i < 25; i++) {
-		r = Math.floor(Math.random() * 6);
-		if (i == 5 || i == 10 || i == 15 || i == 20) {
+	for (let i = 0; i < (Xa * Ya); i++) {
+		r = Math.floor(Math.random() * 12);
+		if (i != 0 && i % Xa == 0) { // This adds the dashes between each row
 			s += "-";
 		}
 		s += a[r];
@@ -64,11 +71,11 @@ function setRandom() {
 	return;
 }
 
-createArray("facff-afaff-afaac-afffa-eaaaf");
+createArray("afcaa-fafaa-faffc-faaaf-efffa");
 
-// End initilisation
-// Begin interaction
 
+
+// Interaction Functions
 function pixelSwitch(i, e) {
 	// https://stackoverflow.com/questions/3234256/find-mouse-position-relative-to-element
 	var rect = e.target.getBoundingClientRect();
@@ -112,8 +119,9 @@ function pixelSwitch(i, e) {
 	return;
 }
 
-// Symmetry modes
 
+
+// Symmetry Functions
 function symmetryDiag(id, className) {
 	var mirror = id.charAt(1)+id.charAt(0);
 	if (mirror != id) {
@@ -145,7 +153,7 @@ function symmetryDiag(id, className) {
 }
 
 function symmetryDiag2(id, className) {
-	var mirror = (4-id.charAt(1)).toString()+(4-id.charAt(0)).toString();
+	var mirror = (Yb-id.charAt(1)).toString()+(Xb-id.charAt(0)).toString();
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -174,9 +182,8 @@ function symmetryDiag2(id, className) {
 	return;
 }
 
-
 function symmetryX(id, className) {
-	var mirror = (id.charAt(0)).toString()+(4-id.charAt(1)).toString();
+	var mirror = (id.charAt(0)).toString()+(Yb-id.charAt(1)).toString();
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -206,7 +213,7 @@ function symmetryX(id, className) {
 }
 
 function symmetryY(id, className) {
-	var mirror = (4-id.charAt(0)).toString()+(id.charAt(1)).toString();
+	var mirror = (Xb-id.charAt(0)).toString()+(id.charAt(1)).toString();
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -236,7 +243,7 @@ function symmetryY(id, className) {
 }
 
 function symmetryMirror(id, className) {
-	var mirror = (4-id.charAt(0)).toString()+(4-id.charAt(1)).toString();
+	var mirror = (Xb-id.charAt(0)).toString()+(Yb-id.charAt(1)).toString();
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -274,20 +281,12 @@ function setCorner(val) {
 }
 
 function setBackground(hex) {
-	// document.getElementById("container").style.background = hex;
 	var r = document.querySelector(':root');
 	r.style.setProperty('--background', hex);
 	return;
 }
 
 function setForeground(hex) {
-	// var id = '00';
-	// for (i = 0; i < 5; i++) {
-	// 	for (j = 0; j < 5; j++) {
-	// 		id = (i).toString() + (j).toString();
-	// 		document.getElementById(id).firstChild.style.background = hex;
-	// 	}
-	// }
 	var r = document.querySelector(':root');
 	r.style.setProperty('--foreground', hex);
 	return;
@@ -306,9 +305,9 @@ function dataOutput() {
 ];`
 	var id = '00';
 	var className = '';
-	for (i = 0; i < 5; i++) {
-		for (j = 0; j < 5; j++) {
-			id = (4-i).toString() + (j).toString();
+	for (i = 0; i < Xa; i++) {
+		for (j = 0; j < Ya; j++) {
+			id = (Xb-i).toString() + (j).toString();
 			className = document.getElementById(id).firstChild.className;
 			outputArr = outputArr.replace(id,className);
 			outputStr = outputStr.replace(id,className);
