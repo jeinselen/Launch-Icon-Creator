@@ -2,7 +2,7 @@
 var tileRes = 128;
 var placementSize = 500;
 // var placementScale = 1.0;
-var dataString = "5x5=afcaa-fafaa-faffc-faaaf-efffa";
+var dataString = "05x05=afcaa-fafaa-faffc-faaaf-efffa";
 var dataArray = [["a","f","c","a","a"],["f","a","f","a","a"],["f","a","f","f","c"],["f","a","a","a","f"],["e","f","f","f","a"]];
 var size1 = 5;
 var size0 = 4;
@@ -28,7 +28,9 @@ function stringToVariables(str) {
 	var [size, data] = str.split("="); // Split canvas size and content data
 	
 	var [X, Y] = size.split("x"); // Get X/Y dimensions
-	// Only X is currently used, simplifying calculation of canvas sizes and ensuring mirror modes work reliably
+	X = parseInt(X);
+	Y = parseInt(Y);
+	// Only X is currently used, simplifying calculation of canvas sizes and ensuring mirror modes work as expected (they only work with odd numbers right now)
 	if (size1 != X) {
 		size1 = X;
 		size0 = X-1;
@@ -48,7 +50,7 @@ function stringToVariables(str) {
 // Update string based on variables
 function variablesToString() {
 	// Use global data
-	var string = size1 + "x" + size1 + "=";
+	var string = size1.toString().padStart(2, '0') + "x" + size1.toString().padStart(2, '0') + "=";
 	arr = []
 	// console.log("dataArray: "+dataArray);
 	for (var row of dataArray) {
@@ -98,7 +100,7 @@ function setData(str) {
 		variablesToString(); // Update string data
 	}
 	
-	logVariables("0");
+	// logVariables("0");
 	
 	updateSize();
 	return;
@@ -124,7 +126,7 @@ function updateSize(input) {
 	// Update 0 based size value
 	size0 = size1-1;
 	
-	logVariables("1");
+	// logVariables("1");
 	
 	resizeData();
 	return;
@@ -140,17 +142,15 @@ function resizeData(input) {
 	var sizeValY = sizeDiffY*0.5;
 	
 	// logVariables("2");
-	console.log("2    sizeX: "+sizeX+"    sizeY: "+sizeY+"    sizeDiffX: "+sizeDiffX+"    sizeDiffY: "+sizeDiffY+"    sizeValX: "+sizeValX+"    sizeValY: "+sizeValY);
+	// console.log("2    sizeX: "+sizeX+"    sizeY: "+sizeY+"    sizeDiffX: "+sizeDiffX+"    sizeDiffY: "+sizeDiffY+"    sizeValX: "+sizeValX+"    sizeValY: "+sizeValY);
 	
 	if (sizeY > size1) {
-		console.log("Reduce columns");
 		// Remove rows
 		dataArray.splice(0, sizeValY);
 		dataArray.splice(-1, sizeValY);
 	}
 	
 	if (sizeX > size1) {
-		console.log("Reduce rows");
 		// Remove elements in rows
 		for (i = 0; i < dataArray.length; i++) {
 			dataArray[i].splice(0, sizeValX);
@@ -159,7 +159,6 @@ function resizeData(input) {
 	}
 	
 	if (sizeX < size1) {
-		console.log("Expand rows");
 		// Add elements in rows
 		var addArray = Array(sizeValX).fill("a");
 		for (i = 0; i < dataArray.length; i++) {
@@ -168,30 +167,27 @@ function resizeData(input) {
 	}
 	
 	if (sizeY < size1) {
-		console.log("Expand columns");
 		// Add rows
 		var row = Array(size1).fill("a");
-		console.log("row: "+row);
 		var rows = Array(sizeValY).fill(row);
-		console.log("rows: "+rows);
 		dataArray = [].concat(rows, dataArray, rows);
 		
 		// var rows = Array.from({ length:rows }, () => (Array.from({ length:columns }, ()=> "a")))
 		// dataArray = [].concat(rows, dataArray, rows);
 	}
 	
-	var sizeX = dataArray[0].length;
-	var sizeY = dataArray.length;
-	var sizeDiffX = Math.abs(size1-sizeX);
-	var sizeDiffY = Math.abs(size1-sizeY);
-	var sizeValX = sizeDiffX*0.5;
-	var sizeValY = sizeDiffY*0.5;
-	console.log("2    sizeX: "+sizeX+"    sizeY: "+sizeY+"    sizeDiffX: "+sizeDiffX+"    sizeDiffY: "+sizeDiffY+"    sizeValX: "+sizeValX+"    sizeValY: "+sizeValY);
+	// var sizeX = dataArray[0].length;
+	// var sizeY = dataArray.length;
+	// var sizeDiffX = Math.abs(size1-sizeX);
+	// var sizeDiffY = Math.abs(size1-sizeY);
+	// var sizeValX = sizeDiffX*0.5;
+	// var sizeValY = sizeDiffY*0.5;
+	// console.log("2    sizeX: "+sizeX+"    sizeY: "+sizeY+"    sizeDiffX: "+sizeDiffX+"    sizeDiffY: "+sizeDiffY+"    sizeValX: "+sizeValX+"    sizeValY: "+sizeValY);
 
 	// Update string data
 	variablesToString();
 	
-	logVariables("2");
+	// logVariables("2");
 	
 	createArray();
 	return;
@@ -227,7 +223,7 @@ function createArray() {
 	}
 	document.getElementById("container").innerHTML = content;
 	
-	logVariables("3");
+	// logVariables("3");
 	
 	setArray();
 	return;
@@ -279,10 +275,10 @@ function pixelSwitch(i, e) {
 	var y = e.clientY - rect.top - halfRes; // Y position from element centre
 	var status = i.firstChild.className;
 	if (Math.max(Math.abs(x + y), Math.abs(x - y)) < halfRes) {
-		if (status == "a") {
-			status = "f";
-		} else {
+		if (status == "f") {
 			status = "a";
+		} else {
+			status = "f";
 		}
 	} else if (x < 0) {
 		if (y > 0) {
@@ -306,8 +302,12 @@ function pixelSwitch(i, e) {
 		symmetryX(i.id, status);
 	} else if (document.getElementById("symmetryY").checked) {
 		symmetryY(i.id, status);
-	} else if (document.getElementById("symmetryMirror").checked) {
-		symmetryMirror(i.id, status);
+	} else if (document.getElementById("symmetryXY").checked) {
+		symmetryXY(i.id, status);
+	} else if (document.getElementById("symmetryRadial2").checked) {
+		symmetryRadial2(i.id, status);
+	} else if (document.getElementById("symmetryRadial4").checked) {
+		symmetryRadial4(i.id, status);
 	}
 	dataFromPixels();
 	return;
@@ -437,6 +437,123 @@ function symmetryY(id, className) {
 					el.className = "a";
 					break;
 				case "b":
+					el.className = "e";
+					break;
+				case "c":
+					el.className = "d";
+					break;
+				case "d":
+					el.className = "c";
+					break;
+				case "e":
+					el.className = "b";
+					break;
+				case "f":
+					el.className = "f";
+					break;
+			}
+		}
+	}
+	return;
+}
+
+function symmetryXY(id, className) {
+	// XY
+	var mirror = (size0-id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
+	if (mirror != id) {
+		var el = document.getElementById(mirror).firstChild;
+		if (el) {
+			switch (className) {
+				case "a":
+					el.className = "a";
+					break;
+				case "b":
+					el.className = "d";
+					break;
+				case "c":
+					el.className = "e";
+					break;
+				case "d":
+					el.className = "b";
+					break;
+				case "e":
+					el.className = "c";
+					break;
+				case "f":
+					el.className = "f";
+					break;
+			}
+		}
+	}
+	
+	// X
+	var mirror = (id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
+	if (mirror != id) {
+		var el = document.getElementById(mirror).firstChild;
+		if (el) {
+			switch (className) {
+				case "a":
+					el.className = "a";
+					break;
+				case "b":
+					el.className = "c";
+					break;
+				case "c":
+					el.className = "b";
+					break;
+				case "d":
+					el.className = "e";
+					break;
+				case "e":
+					el.className = "d";
+					break;
+				case "f":
+					el.className = "f";
+					break;
+			}
+		}
+	}
+	
+	// Y
+	var mirror = (size0-id.charAt(0)).toString()+(id.charAt(1)).toString();
+	if (mirror != id) {
+		var el = document.getElementById(mirror).firstChild;
+		if (el) {
+			switch (className) {
+				case "a":
+					el.className = "a";
+					break;
+				case "b":
+					el.className = "e";
+					break;
+				case "c":
+					el.className = "d";
+					break;
+				case "d":
+					el.className = "c";
+					break;
+				case "e":
+					el.className = "b";
+					break;
+				case "f":
+					el.className = "f";
+					break;
+			}
+		}
+	}
+	return;
+}
+
+function symmetryRadial2(id, className) {
+	var mirror = (size0-id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
+	if (mirror != id) {
+		var el = document.getElementById(mirror).firstChild;
+		if (el) {
+			switch (className) {
+				case "a":
+					el.className = "a";
+					break;
+				case "b":
 					el.className = "d";
 					break;
 				case "c":
@@ -457,7 +574,8 @@ function symmetryY(id, className) {
 	return;
 }
 
-function symmetryMirror(id, className) {
+function symmetryRadial4(id, className) {
+	// Opposite
 	var mirror = (size0-id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
@@ -477,6 +595,62 @@ function symmetryMirror(id, className) {
 					break;
 				case "e":
 					el.className = "c";
+					break;
+				case "f":
+					el.className = "f";
+					break;
+			}
+		}
+	}
+	
+	// Clockwise
+	var mirror = (size0-id.charAt(1)).toString()+(id.charAt(0)).toString();
+	if (mirror != id) {
+		var el = document.getElementById(mirror).firstChild;
+		if (el) {
+			switch (className) {
+				case "a":
+					el.className = "a";
+					break;
+				case "b":
+					el.className = "c";
+					break;
+				case "c":
+					el.className = "d";
+					break;
+				case "d":
+					el.className = "e";
+					break;
+				case "e":
+					el.className = "b";
+					break;
+				case "f":
+					el.className = "f";
+					break;
+			}
+		}
+	}
+	
+	// Counter-Clockwise
+	var mirror = (id.charAt(1)).toString()+(size0-id.charAt(0)).toString();
+	if (mirror != id) {
+		var el = document.getElementById(mirror).firstChild;
+		if (el) {
+			switch (className) {
+				case "a":
+					el.className = "a";
+					break;
+				case "b":
+					el.className = "e";
+					break;
+				case "c":
+					el.className = "b";
+					break;
+				case "d":
+					el.className = "c";
+					break;
+				case "e":
+					el.className = "d";
 					break;
 				case "f":
 					el.className = "f";
@@ -517,7 +691,8 @@ function saveImage(el,id) {
 	
 	domtoimage.toPng(source).then(function (dataUrl) {
 		anchor.href = dataUrl;
-		anchor.download = el.value;
+		// anchor.download = el.value;
+		anchor.download = dataString;
 		anchor.click();
 	}).catch(function (error) {
 		console.error('dom-to-image failure', error);
@@ -528,10 +703,6 @@ function saveImage(el,id) {
 	// htmlToImage.toPng(source).then(function (dataUrl) {
 	// 	download(dataUrl, el.value);
 	// });
-	
-	// Attempts to use FileSaver and/or HTML2Canvas on Apple systems (either MacOS or iOS) failed
-	
-	// console.log("...download completed?");
 }
 
 function saveVector(el,id) {
@@ -540,7 +711,8 @@ function saveVector(el,id) {
 
 	domtoimage.toSvg(source).then(function (dataUrl) {
 		anchor.href = dataUrl;
-		anchor.download = el.value;
+		// anchor.download = el.value; 
+		anchor.download = dataString;
 		anchor.click();
 	}).catch(function (error) {
 		console.error('dom-to-image failure', error);

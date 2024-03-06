@@ -27,17 +27,21 @@
 			<div id="grid-symmetry">
 				<h2>symmetry:</h2>
 				<p>
-					<label for="symmetryNo"><input type="radio" name="symmetry" value="symmetryNo" id="symmetryNo"> ≠ none &nbsp; &nbsp;&nbsp;</label>
+					<label for="symmetryNo"><input type="radio" name="symmetry" value="symmetryNo" id="symmetryNo" checked> 🚫 none &nbsp; &nbsp;&nbsp;</label>
 					<br />
-					<label for="symmetryDiag"><input type="radio" name="symmetry" value="symmetryDiag" id="symmetryDiag" checked> / diagonal&nbsp;</label>
+					<label for="symmetryDiag"><input type="radio" name="symmetry" value="symmetryDiag" id="symmetryDiag"> ↘️ diagonal &nbsp;&nbsp;</label>
 					<br />
-					<label for="symmetryDiag2"><input type="radio" name="symmetry" value="symmetryDiag2" id="symmetryDiag2"> \ diagonal&nbsp;</label>
+					<label for="symmetryDiag2"><input type="radio" name="symmetry" value="symmetryDiag2" id="symmetryDiag2"> ↗️ diagonal &nbsp;&nbsp;</label>
 					<br />
-					<label for="symmetryX"><input type="radio" name="symmetry" value="symmetryX" id="symmetryX"> X mirror &nbsp;&nbsp;</label>
+					<label for="symmetryX"><input type="radio" name="symmetry" value="symmetryX" id="symmetryX"> ➡️ mirror X &nbsp;&nbsp;</label>
 					<br />
-					<label for="symmetryY"><input type="radio" name="symmetry" value="symmetryY" id="symmetryY"> Y mirror &nbsp;&nbsp;</label>
+					<label for="symmetryY"><input type="radio" name="symmetry" value="symmetryY" id="symmetryY"> ⬇️ mirror Y &nbsp;&nbsp;</label>
 					<br />
-					<label for="symmetryMirror"><input type="radio" name="symmetry" value="symmetryMirror" id="symmetryMirror"> O radial &nbsp;&nbsp;</label>
+					<label for="symmetryXY"><input type="radio" name="symmetry" value="symmetryXY" id="symmetryXY"> ⏹️ mirror X+Y &nbsp;&nbsp;</label>
+					<br />
+					<label for="symmetryRadial2"><input type="radio" name="symmetry" value="symmetryRadial2" id="symmetryRadial2"> 🔄 radial x2 &nbsp;&nbsp;</label>
+					<br />
+					<label for="symmetryRadial4"><input type="radio" name="symmetry" value="symmetryRadial4" id="symmetryRadial4"> 🔄 radial x4 &nbsp;&nbsp;</label>
 				</p>
 			</div>
 
@@ -73,18 +77,18 @@
 				<input type="button" value="clear" onclick="setData('a');" class="reset" />
 				<input type="button" value="fill" onclick="setData('f');" class="reset" />
 				<input type="button" value="random" onclick="setData('rand');" class="reset" />
-				<input type="button" value="logo" onclick="setData('5x5=afcaa-fafaa-faffc-faaaf-efffa');" class="reset" />
+				<input type="button" value="logo" onclick="setData('05x05=afcaa-fafaa-faffc-faaaf-efffa');" class="reset" />
 			</p>
 			<p>
 				<textarea id="outputString" rows="4" cols="32" onClick="this.select();" onChange="setData(this.value)"></textarea>
 			</p>
 			<p>
 				<input id="image" type="button" value="download image" onclick="saveImage(this,'container');" class="download" />
-				<a id="download" href=""></a>
 			</p>
 			<p>
-				<input type="button" value="log vars" onclick="logVariables(this);" class="reset" />
+				<input id="image" type="button" value="download SVG" onclick="saveVector(this,'container');" class="download" />
 			</p>
+			<a id="download" href=""></a>
 		</div>
 	</div>
 
