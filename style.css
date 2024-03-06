@@ -14,7 +14,7 @@
 	--buttonB: 2em;
 	--buttonB2: 1.9em;
 	--buttonC: 2em;
-	/* Using manual overrides of 100px, 101px, and -1px used to be required in some browsers, unsure now with Safari giving me issues with rendering/downloading */
+/*	Using manual overrides of 100px, 101px, and -1px used to be required in some browsers, but seems ok now */
 	--tileSizeA: 100%;
 	--tileSizeB: 100%;
 	--tileOffset: 0;
@@ -29,7 +29,7 @@ body {
 	padding: 0;
 	font-family: "Outfit", sans-serif;
 	font-size: 1em;
-  font-optical-sizing: auto;
+	font-optical-sizing: auto;
 	font-weight: 200;
 	background-color: var(--grey0);
 	color: var(--grey4);
@@ -42,52 +42,52 @@ body {
 	display: grid;
 	grid-template-columns: 23em auto;
 	-webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-/* 	border: 1px solid #ff0000; */
+	-ms-user-select: none;
+	user-select: none;
+/*	border: 1px solid #ff0000; */
 }
 
 #grid-settings {
 	width: 22em;
-/* 	padding: 1em; */
-/* 	border: 1px solid #ffff00; */
+/*	padding: 1em; */
+/*	border: 1px solid #ffff00; */
 }
 
 #grid-intro {
 	margin-bottom: 1em;
-/* 	border: 1px solid #ff0000; */
+/*	border: 1px solid #ff0000; */
 }
 
 #grid-prefs {
 	display: grid;
 	grid-template-columns: 50% 50%;
 	margin-bottom: 1em;
-/* 	border: 1px solid #00ff00; */
+/*	border: 1px solid #00ff00; */
 }
 
 #grid-symmetry {
-/* 	border: 1px solid #0000ff; */
+/*	border: 1px solid #0000ff; */
 }
 
 #grid-column2 {
-/* 	border: 1px solid #00ff99; */
+/*	border: 1px solid #00ff99; */
 }
 
 #grid-size {
-/* 	border: 1px solid #ff9900; */
+/*	border: 1px solid #ff9900; */
 }
 
 #grid-colors {
-/* 	border: 1px solid #00ff99; */
+/*	border: 1px solid #00ff99; */
 }
 
 #grid-data {
 	margin-bottom: 1em;
-/* 	border: 1px solid #ff9900; */
+/*	border: 1px solid #ff9900; */
 }
 
 #grid-artwork {
-/* 	border: 1px solid #0099ff; */
+/*	border: 1px solid #0099ff; */
 }
 
 
@@ -118,7 +118,7 @@ input, label, .dimension, .load, .reset, .download {
 	text-align: center;
 	border-width: 0;
 	cursor: pointer;
-/* 	border: solid 1px red; */
+/*	border: solid 1px red; */
 }
 
 input {
@@ -146,7 +146,7 @@ input {
 #canvasDecrease, #canvasIncrease {
 	position: absolute;
 	text-align: center;
-/* 	background: rgba(255, 0, 0, 0.2); */
+/*	background: rgba(255, 0, 0, 0.2); */
 	cursor: pointer;
 }
 
@@ -170,14 +170,14 @@ input {
 
 /* #grid-colors input[type=radio] { */
 #grid-colors input {
-  appearance: none;
+	appearance: none;
 	width: var(--buttonB);
 	height: var(--buttonB);
 	line-height: var(--buttonB2);
 	margin: 0 0.25em 0.25em 0;
-/* 	padding: 1.0em; */
+/*	padding: 1.0em; */
 	outline: none;
-  border-radius: var(--cornerUI);
+	border-radius: var(--cornerUI);
 	border: 1px solid black;
 }
 
@@ -191,29 +191,29 @@ input {
 
 #grid-colors input.transparent::before {
 	content: "🚫";
-/* 	content: "X"; */
+/*	content: "X"; */
 }
 
 #grid-colors input.random::before {
-/* 	content: "∞"; */
-/* 	content: "♾️"; */
+/*	content: "∞"; */
+/*	content: "♾️"; */
 	content: "🔄";
 }
 
 #grid-colors input.image {
-/* 	background-repeat: no-repeat; */
+/*	background-repeat: no-repeat; */
 	background-position: center;
 	background-size: cover;
-/*   background-attachment: fixed; */
+/*	background-attachment: fixed; */
 }
 
 #grid-colors input.image::before {
-/* 	content: "→"; */
-/* 	content: "⤵️"; */
+/*	content: "→"; */
+/*	content: "⤵️"; */
 	content: "📷";
-/* 	content: "🖼️"; */
-/* 	content: "📁"; */
-/* 	content: "📂"; */
+/*	content: "🖼️"; */
+/*	content: "📁"; */
+/*	content: "📂"; */
 }
 
 #backgroundFile, #foregroundFile {
@@ -229,11 +229,11 @@ input {
 }
 
 input[type=file]::file-selector-button {
-/* 	display: none; */
-  border: none;
-/*   padding: 10px 20px; */
-  cursor: pointer;
-  transition: background .2s ease-in-out;
+/*	display: none; */
+	border: none;
+/*	padding: 10px 20px; */
+	cursor: pointer;
+	transition: background .2s ease-in-out;
 	content: "sdf";
 	background-color: var(--grey2);
 	color: white;
@@ -256,7 +256,7 @@ input[type=file]::file-selector-button {
 	background-color: black;
 	background-position: center;
 	background-size: cover;
-/* 	border-radius: var(--cornerUI); */
+/*	border-radius: var(--cornerUI); */
 	outline: none;
 	border: 1px solid black;
 }
@@ -272,7 +272,7 @@ textarea {
 	font-size: 1em;
 	line-height: 1.0em;
 	font-family: "Courier New", monospace;
-/* 	background-color: var(--grey1); */
+/*	background-color: var(--grey1); */
 	background-color: transparent;
 	color: var(--grey4);
 	border-width: 0;
@@ -309,10 +309,10 @@ textarea {
 
 #container, .background {
 	background-color: var(--background);
-	/* 	background-repeat: no-repeat; */
+/*	background-repeat: no-repeat; */
 	background-position: center;
 	background-size: cover;
-	/*   background-attachment: fixed; */
+/*	background-attachment: fixed; */
 	transition: background-color 0.5s;
 }
 
@@ -323,10 +323,10 @@ textarea {
 	transform: scale(1.0);
 	
 /* 	Image Background */
-	/* 	background-repeat: no-repeat; */
+/*	background-repeat: no-repeat; */
 	background-position: center;
 	background-size: cover;
-	/*   background-attachment: fixed; */
+/*	background-attachment: fixed; */
 	
 /* 	Animations */
 	background-color: var(--foreground);
