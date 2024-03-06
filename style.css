@@ -1,15 +1,35 @@
 :root {
-	--corner: 75%;
+	--grey0: #1A1C1E;
+	--grey1: #2A2A32;
+	--grey2: #474A52;
+	--grey3: #9296A0;
+	--grey4: #E4E5E7;
+	--color0: #FFCC2D;
+	--color1: #FF1C52;
+	--color2: #6806CC;
+	--color3: #1E5AF2;
 	--background: black;
 	--foreground: white;
+	--buttonA: 4em;
+	--buttonB: 2em;
+	--buttonC: 2em;
+	/* Using manual overrides of 100px, 101px, and -1px used to be required in some browsers, unsure now with Safari giving me issues with rendering/downloading */
+	--tileSizeA: 100%;
+	--tileSizeB: 100%;
+	--tileOffset: 0;
+	--corner: 75%;
 }
 
 body {
 	margin: 0;
 	padding: 0;
+	font-family: "Outfit", sans-serif;
 	font-size: 1em;
-	font-family: "Courier New", monospace;
-	background-color: grey;
+  font-optical-sizing: auto;
+	font-weight: 200;
+	background-color: var(--grey0);
+	color: var(--grey4);
+	cursor: default;
 }
 
 #grid-page {
@@ -18,6 +38,9 @@ body {
 	display: grid;
 	grid-template-columns: auto auto;
 /* 	border: 1px solid #ff0000; */
+	-webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #grid-settings {
@@ -52,28 +75,18 @@ body {
 /* 	border: 1px solid #00ff99; */
 }
 
-#grid-colors {
-	margin-bottom: 1em;
-/* 	padding-left: 1em; */
-/* 	margin-right: 1em; */
-/* 	border: 1px solid #00ff99; */
-}
-
-#grid-corners {
+#grid-size {
 /* 	margin-bottom: 1em; */
 /* 	padding-left: 1em; */
 /* 	margin-right: 1em; */
 /* 	border: 1px solid #ff9900; */
 }
 
-#grid-reset {
-	margin-bottom: 1em;
-/* 	border: 1px solid #ff9900; */
-}
-
-#grid-download {
-	margin-bottom: 1em;
-/* 	border: 1px solid #ff9900; */
+#grid-colors {
+/*	margin-bottom: 1em;*/
+/* 	padding-left: 1em; */
+/* 	margin-right: 1em; */
+/* 	border: 1px solid #00ff99; */
 }
 
 #grid-data {
@@ -84,14 +97,21 @@ body {
 #grid-artwork {
 	width: 700px;
 	height: 700px;
+/* 	border: 1px solid #0099ff; */
 }
+
+
 
 /* Begin Element Styles */
 
+.flex {
+	display: flex;
+}
+
 h1, h2, h3, h4, h5, h6 {
-	font-weight: bold;
-	font-size: 1em;
-	line-height: 1em;
+	font-weight: 100;
+	font-size: 1.5em;
+	line-height: 1.5em;
 	margin: 0;
 	padding: 0;
 }
@@ -101,68 +121,138 @@ p {
 	padding: 0;
 }
 
-label, .button, .reset, .download {
-	width: 3.82em;
+input, label, .dimension, .reset, .download {
 	margin: 0;
-	padding: 0.125em;
 	font-size: 1em;
-	line-height: 1.5em;
-	font-family: "Courier New", monospace;
-	background-color: lightgrey;
+	line-height: 1.6em;
+	text-align: center;
 	border-width: 0;
+	cursor: pointer;
+}
+
+input {
+	background-color: var(--grey2);
+	color: var(--grey4);
+	border-radius: 0.25em;
+}
+
+.dimension {
+	position: relative;
+	width: var(--buttonA);
+	height: var(--buttonA);
+	padding: 0;
+	margin-right: 0.5em;
+}
+
+.readout {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	line-height: var(--buttonA);
+	text-align: center;
+}
+
+#xa, #xb, #ya, #yb {
+	position: absolute;
+	text-align: center;
+/* 	background: rgba(255, 0, 0, 0.2); */
+	cursor: pointer;
+}
+
+#xa {
+	top: 0;
+	left: 0;
+	text-align: left;
+	width: var(--buttonB);
+	height: var(--buttonA);
+	line-height: var(--buttonA);
+}
+
+#xb {
+	top: 0;
+	right: 0;
+	text-align: right;
+	width: var(--buttonB);
+	height: var(--buttonA);
+	line-height: var(--buttonA);
+}
+
+#ya {
+	bottom: 0;
+	left: 0;
+	width: var(--buttonA);
+	height: var(--buttonB);
+/* 	line-height: var(--buttonB); */
+	line-height: 3em;
+}
+
+#yb {
+	top: 0;
+	left: 0;
+	width: var(--buttonA);
+	height: var(--buttonB);
+/* 	line-height: var(--buttonB); */
+	line-height: 1em;
 }
 
 #grid-colors input {
-	width: 5em;
-	height: 5em;
-	margin: 0;
-	padding: 0;
+	font-size: inherit;
+	width: var(--buttonA);
+	height: var(--buttonA);
+	margin: 0 0.5em 0 0;
+	padding: 0.5em;
 	border: none;
 	border-style: none;
 	outline: none;
 	background-color: transparent;
+	background-color: lightgrey;
+	background-color: var(--background);
 }
 
-#grid-corners input {
-	width: 3em;
-	height: 3em;
-	margin: 0;
-	padding: 0;
-	background-color: lightgrey;
+.reset {
+	width: 4.9em;
+	margin: 0 0.1em 0 0;
 }
 
 .download {
-	width: 21.5em;
+	width: 20.6em;
 }
 
 textarea {
-	width: 21em;
+	width: 20em;
 	margin: 0;
 	padding: 0.25em;
 	font-size: 1em;
 	line-height: 1.0em;
 	font-family: "Courier New", monospace;
-	background-color: #aaa;
+/* 	background-color: var(--grey1); */
+	background-color: transparent;
+	color: var(--grey4);
 	border-width: 0;
 }
 
-/* Begin Artwork Styling*/
+
+
+/* Begin Icon Styling */
 
 #placement {
 	position: relative;
-	width: 700px;
-	height: 700px;
+/* 	transform: scale(0.5); */
+/* 	width: 700px; */
+/* 	height: 700px; */
+/* 	border: 2px solid red; */
 }
 
 #container {
-	width: 700px;
-	height: 700px;
+/* 	width: 700px; */
+/* 	height: 700px; */
+/* 	width: 100%; */
+/* 	height: 100%; */
+/* 	border: 2px solid green; */
 }
 
 .pixel {
 	position: absolute;
-	width: 100px;
-	height: 100px;
 	margin: 0;
 	padding: 0;
 	/* 	border: 1px solid red; */
@@ -171,15 +261,15 @@ textarea {
 }
 
 .pixel:hover {
-	border: 2px solid grey;
-	margin: -2px;
+	border: solid 1px var(--color0);
+	margin: -1px;
 	z-index: 100;
 }
 
 .a, .b, .c, .d, .e, .f {
 	position: absolute;
-	width: 100px;
-	height: 100px;
+	width: var(--tileSizeA);
+	height: var(--tileSizeA);
 }
 
 .a {
@@ -187,9 +277,9 @@ textarea {
 }
 
 .b, .c, .d, .e {
-	width: 101px;
-	height: 101px;
-	margin: -1px;
+	width: var(--tileSizeB);
+	height: var(--tileSizeB);
+	margin: var(--tileOffset);
 }
 
 .b {

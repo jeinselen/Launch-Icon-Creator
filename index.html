@@ -3,7 +3,11 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Pixel Icon Creator</title>
-	<link rel="stylesheet" href="./style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap')
+</style><link rel="stylesheet" href="./style.css">
 
 </head>
 <body>
@@ -11,11 +15,11 @@
 <div id="grid-page">
 	<div id="grid-settings">
 		<div id="grid-intro">
-			<h1>Pixel Logo Creator</h1>
+			<h1>Pixel Icon Creator</h1>
 			<p>
 				click a grid element to change it:<br />
 				• centre toggles the fill status<br />
-				• corners set a quarter radius<br />
+				• corners set an opposing radius<br />
 			</p>
 		</div>
 
@@ -38,55 +42,50 @@
 			</div>
 
 			<div id="grid-column2">
-				<div id="grid-corners">
-					<h2>corners:</h2>
-					</p>
-						<input type="button" value="" style="border-top-right-radius: 75%;" onclick="setCorner('75%');" class="button" />
-						<input type="button" value="" style="border-top-right-radius: 100%;" onclick="setCorner('100%');" class="button" />
+				<div id="grid-size">
+					<h2>canvas:</h2>
+					<p>
+						<div class="flex">
+							<div id="xdimension" class="dimension">
+								<div id="xvalue" class="readout">5</div>
+								<div id="xa" onclick="updateX('-');">◀︎</div>
+								<div id="xb" onclick="updateX('+');">▶︎</div>
+							</div>
+							<div id="ydimension" class="dimension">
+								<div id="yvalue" class="readout">5</div>
+								<div id="ya" onclick="updateY('-');">▼</div>
+								<div id="yb" onclick="updateY('+');">▲</div>
+							</div>
+						</div>
 					</p>
 				</div>
 
 				<div id="grid-colors">
 					<h2>colors:</h2>
 					<p>
-<!-- 						<input type="button" value="" style="background-color: #000000;" onclick="setBackground('#000000');" class="reset" />
-						<input type="button" value="" style="background-color: #ffffff;" onclick="setForeground('#ffffff');" class="reset" /> -->
-						<input type="color" name="background-color" id="background-color" value="#000000" onchange="setBackground(this.value)"/><input type="color" name="background-color" id="background-color" value="#ffffff" onchange="setForeground(this.value)" />
+						<div class="flex">
+						<input type="color" name="background-color" id="background-color" value="#000000" onchange="setBackground(this.value)"/>
+							<input type="color" name="background-color" id="background-color" value="#ffffff" onchange="setForeground(this.value)" />
+						</div>
 					</p>
 				</div>
 			</div>
 		</div>
 
-		<div id="grid-reset">
-			<h2>reset:</h2>
-			<p>
-				<input type="button" value="empty" onclick="setArray('aaaaa-aaaaa-aaaaa-aaaaa-aaaaa');" class="reset" />
-				<input type="button" value="full" onclick="setArray('fffff-fffff-fffff-fffff-fffff');" class="reset" />
-				<input type="button" value="random" onclick="setRandom();" class="reset" />
-				<input type="button" value="logo" onclick="setArray('afcaa-fafaa-faffc-faaaf-efffa');" class="reset" />
-				<input type="button" value="custom" onclick="setArray(prompt('please enter data string:', 'abfaa-bafaa-fafff-faaad-fffda'));" class="reset" />
-			</p>
-		</div>
-
-		<div id="grid-download">
-			<h2>download:</h2><a id="download" href="" download=""></a>
-			<p>
-				<input id="image" type="button" value="download image" onclick="saveImage(this,'container');" class="download" />
-			</p>
-		</div>
-
 		<div id="grid-data">
 			<h2>data:</h2>
 			<p>
-				<textarea id="outputString" rows="1" cols="32" onClick="this.select();"></textarea>
-				<br />
-				<textarea id="outputArray" rows="7" cols="32" onClick="this.select();"></textarea>
+				<input type="button" value="clear" onclick="setArray('a');" class="reset" />
+				<input type="button" value="fill" onclick="setArray('f');" class="reset" />
+				<input type="button" value="random" onclick="setArray('rand');" class="reset" />
+				<input type="button" value="logo" onclick="setArray('5x5=afcaa-fafaa-faffc-faaaf-efffa');" class="reset" />
 			</p>
-		</div>
-
-		<div>
 			<p>
-				Note: v2 swaps "A" and "F" usage
+				<textarea id="outputString" rows="4" cols="32" onClick="this.select();" onChange="setArray(this.value)"></textarea>
+			</p>
+			<p>
+				<input id="image" type="button" value="download image" onclick="saveImage(this,'container');" class="download" />
+				<a id="download" href=""></a>
 			</p>
 		</div>
 	</div>
@@ -98,7 +97,10 @@
 	</div>
 </div>
 <!-- partial -->
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js'></script><script	src="./script.js"></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js'></script><script	src="./script.js"></script>
 
 </body>
 </html>
