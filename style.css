@@ -18,6 +18,7 @@
 	--tileSizeB: 100%;
 	--tileOffset: 0;
 	--corner: 75%;
+	--cornerUI: 0.25em;
 }
 
 body {
@@ -114,18 +115,19 @@ input, label, .dimension, .reset, .download {
 	text-align: center;
 	border-width: 0;
 	cursor: pointer;
+/* 	border: solid 1px red; */
 }
 
 input {
 	background-color: var(--grey2);
 	color: var(--grey4);
-	border-radius: 0.25em;
+	border-radius: var(--cornerUI);
 }
 
 .dimension {
 	position: relative;
-	width: var(--buttonA);
-	height: var(--buttonA);
+	width: 8em;
+	height: var(--buttonB);
 	padding: 0;
 	margin-right: 0.5em;
 }
@@ -134,7 +136,7 @@ input {
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	line-height: var(--buttonA);
+	line-height: var(--buttonB);
 	text-align: center;
 }
 
@@ -149,32 +151,50 @@ input {
 	top: 0;
 	left: 0;
 	text-align: left;
-	width: var(--buttonB);
-	height: var(--buttonA);
-	line-height: var(--buttonA);
+	width: var(--buttonA);
+	height: var(--buttonB);
+	line-height: var(--buttonB);
 }
 
 #canvasIncrease {
 	top: 0;
 	right: 0;
 	text-align: right;
-	width: var(--buttonB);
-	height: var(--buttonA);
-	line-height: var(--buttonA);
+	width: var(--buttonA);
+	height: var(--buttonB);
+	line-height: var(--buttonB);
 }
 
 #grid-colors input {
-	font-size: inherit;
-	width: var(--buttonA);
-	height: var(--buttonA);
-	margin: 0 0.5em 0 0;
-	padding: 0.5em;
-	border: none;
-	border-style: none;
+  appearance: none;
+	width: var(--buttonB);
+	height: var(--buttonB);
+	margin: 0 0.25em 0 0;
+/* 	padding: 1.0em; */
 	outline: none;
-	background-color: transparent;
-	background-color: lightgrey;
-	background-color: var(--background);
+  border-radius: var(--cornerUI);
+	border: 1px solid black;
+}
+
+#grid-colors input:hover {
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+#grid-colors input:checked {
+	border-color: white;
+}
+
+#grid-colors input.transparent, #grid-colors input.random {
+	border-style: dotted;
+	border-width: 2px;
+}
+
+#grid-colors input.transparent::before {
+	content: "🚫";
+}
+
+#grid-colors input.random::before {
+	content: "🔄";
 }
 
 .reset {
@@ -206,6 +226,7 @@ textarea {
 #placement {
 	position: relative;
 /* 	transform: scale(0.5); */
+	border: solid 2px black;
 }
 
 #container {

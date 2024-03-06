@@ -30,7 +30,7 @@ function stringToVariables(str) {
 	var [X, Y] = size.split("x"); // Get X/Y dimensions
 	X = parseInt(X);
 	Y = parseInt(Y);
-	// Only X is currently used, simplifying calculation of canvas sizes and ensuring mirror modes work as expected (they only work with odd numbers right now)
+	// Only X is currently used, simplifying calculation of canvas sizes and ensuring mirror modes work as expected (they only work with odd numbers for now)
 	if (size1 != X) {
 		size1 = X;
 		size0 = X-1;
@@ -171,19 +171,8 @@ function resizeData(input) {
 		var row = Array(size1).fill("a");
 		var rows = Array(sizeValY).fill(row);
 		dataArray = [].concat(rows, dataArray, rows);
-		
-		// var rows = Array.from({ length:rows }, () => (Array.from({ length:columns }, ()=> "a")))
-		// dataArray = [].concat(rows, dataArray, rows);
 	}
 	
-	// var sizeX = dataArray[0].length;
-	// var sizeY = dataArray.length;
-	// var sizeDiffX = Math.abs(size1-sizeX);
-	// var sizeDiffY = Math.abs(size1-sizeY);
-	// var sizeValX = sizeDiffX*0.5;
-	// var sizeValY = sizeDiffY*0.5;
-	// console.log("2    sizeX: "+sizeX+"    sizeY: "+sizeY+"    sizeDiffX: "+sizeDiffX+"    sizeDiffY: "+sizeDiffY+"    sizeValX: "+sizeValX+"    sizeValY: "+sizeValY);
-
 	// Update string data
 	variablesToString();
 	
@@ -196,15 +185,17 @@ function resizeData(input) {
 // Create canvas of pixel elements
 function createArray() {
 	// Get placement and container elements, reset content, set size and scale
-	// Maybe don't enable placement changes till the mouse interactions are figured out for scaled values?
-	// var placement = document.getElementById('placement');
+	var placement = document.getElementById('placement');
 	var container = document.getElementById('container');
 	container.innerHTML = ''; // Remove any previous content
 	var containerRes = size1*tileRes
-	// var placementScale = placementSize / containerRes;
-	// placement.style.transform = "scale("+placementScale+")";
 	container.style.width = containerRes+'px';
 	container.style.height = containerRes+'px';
+	placement.style.width = containerRes+'px';
+	placement.style.height = containerRes+'px';
+	// Don't enable placement changes till the mouse interactions are figured out for scaled values
+	// var placementScale = placementSize / containerRes;
+	// placement.style.transform = "scale("+placementScale+")";
 	
 	// Create individual pixel elements
 	var id = '';
@@ -213,7 +204,7 @@ function createArray() {
 	for (i = 0; i < size1; i++) {
 		for (j = 0; j < size1; j++) {
 			// Define element settings
-			id = (size0-i).toString() + (j).toString();
+			id = (size0-i).toString().padStart(2, "0") + (j).toString().padStart(2, "0");
 			style = 'style="width: '+tileRes+'px; height: '+tileRes+'px; top: '+(i)*tileRes+'px; left: '+(j)*tileRes+'px;"';
 			// Add elements to content collection
 			content += '<div id="'+id+'" class="pixel" '+style+' onclick="pixelSwitch(this,event)">';
@@ -237,14 +228,14 @@ function setArray(str) {
 	var id = '';
 	for (i = 0; i < size1; i++) { // rows
 		for (j = 0; j < size1; j++) { // row elements
-			id = (size0-i).toString() + (j).toString();
+			id = (size0-i).toString().padStart(2, "0") + (j).toString().padStart(2, "0");
 			// console.log("element ID: "+id);
 			// console.log("array: "+dataArray[i][j]);
 			document.getElementById(id).firstChild.className = dataArray[i][j];
 		}
 	}
 	
-	logVariables("4");
+//	logVariables("4");
 	
 	updateDisplay();
 	return;
@@ -254,13 +245,46 @@ function updateDisplay() {
 	document.getElementById("canvasDimension").innerHTML = size1;
 	document.getElementById("outputString").value = dataString;
 	
-	logVariables("5");
+//	logVariables("5");
+	
 	return;
 }
 
 // Trigger default array creation on page load
-// updateSize();
 createArray();
+
+
+
+
+
+// Change colours
+
+Array.prototype.random = function () {
+	return this[Math.floor(Math.random() * this.length)];
+}
+
+function setBackground(el) {
+	var r = document.querySelector(':root');
+	r.style.setProperty('--background', el.style.backgroundColor);
+	return;
+}
+
+function setForeground(el) {
+	if (el.style.backgroundColor == "transparent") {
+		var arr = ["#474A52", "#9296A0", "#FFCC2D", "#FF1C52", "#6806CC", "#1E5AF2"];
+		for (const child of document.getElementById("container").children) {
+			child.firstChild.style.backgroundColor = arr.random();
+		}
+	} else {
+		for (const child of document.getElementById("container").children) {
+//			child.firstChild.style.backgroundColor = null;
+			child.firstChild.style.removeProperty("background-color");
+		}
+	}
+	var r = document.querySelector(':root');
+	r.style.setProperty('--foreground', el.style.backgroundColor);
+	return;
+}
 
 
 
@@ -274,6 +298,7 @@ function pixelSwitch(i, e) {
 	var x = e.clientX - rect.left - halfRes; // X position from element centre
 	var y = e.clientY - rect.top - halfRes; // Y position from element centre
 	var status = i.firstChild.className;
+	
 	if (Math.max(Math.abs(x + y), Math.abs(x - y)) < halfRes) {
 		if (status == "f") {
 			status = "a";
@@ -293,6 +318,7 @@ function pixelSwitch(i, e) {
 			status = "e";
 		}
 	}
+	
 	i.firstChild.className = status;
 	if (document.getElementById("symmetryDiag").checked) {
 		symmetryDiag(i.id, status);
@@ -309,6 +335,7 @@ function pixelSwitch(i, e) {
 	} else if (document.getElementById("symmetryRadial4").checked) {
 		symmetryRadial4(i.id, status);
 	}
+	
 	dataFromPixels();
 	return;
 }
@@ -320,15 +347,17 @@ function dataFromPixels() {
 	for (i = 0; i < size1; i++) {
 		var row = [];
 		for (j = 0; j < size1; j++) {
-			id = (size0-i).toString() + (j).toString();
+			id = (size0-i).toString().padStart(2, "0") + (j).toString().padStart(2, "0");
 			char = document.getElementById(id).firstChild.className;
 			row.push(char);
 		}
 		dataArray.push(row);
 	}
+	
+	// console.log("Data updated from pixels");
+
 	variablesToString(); // Update global string based on new global array values
 	updateDisplay(); // Update output display
-	// console.log("Data updated from pixels");
 	return;
 }
 
@@ -338,7 +367,7 @@ function dataFromPixels() {
 
 // Symmetry Functions
 function symmetryDiag(id, className) {
-	var mirror = id.charAt(1)+id.charAt(0);
+	var mirror = (id.substring(2, 4)).toString().padStart(2, "0")+(id.substring(0, 2)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -368,7 +397,9 @@ function symmetryDiag(id, className) {
 }
 
 function symmetryDiag2(id, className) {
-	var mirror = (size0-id.charAt(1)).toString()+(size0-id.charAt(0)).toString();
+	var mirror = (size0-id.substring(2, 4)).toString().padStart(2, "0")+(size0-id.substring(0, 2)).toString().padStart(2, "0");
+//	console.log("ID: " + id);
+//	console.log("mirror: " + mirror);
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -398,7 +429,7 @@ function symmetryDiag2(id, className) {
 }
 
 function symmetryX(id, className) {
-	var mirror = (id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
+	var mirror = (id.substring(0, 2)).toString().padStart(2, "0")+(size0-id.substring(2, 4)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -428,7 +459,7 @@ function symmetryX(id, className) {
 }
 
 function symmetryY(id, className) {
-	var mirror = (size0-id.charAt(0)).toString()+(id.charAt(1)).toString();
+	var mirror = (size0-id.substring(0, 2)).toString().padStart(2, "0")+(id.substring(2, 4)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -459,7 +490,7 @@ function symmetryY(id, className) {
 
 function symmetryXY(id, className) {
 	// XY
-	var mirror = (size0-id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
+	var mirror = (size0-id.substring(0, 2)).toString().padStart(2, "0")+(size0-id.substring(2, 4)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -487,7 +518,7 @@ function symmetryXY(id, className) {
 	}
 	
 	// X
-	var mirror = (id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
+	var mirror = (id.substring(0, 2)).toString().padStart(2, "0")+(size0-id.substring(2, 4)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -515,7 +546,7 @@ function symmetryXY(id, className) {
 	}
 	
 	// Y
-	var mirror = (size0-id.charAt(0)).toString()+(id.charAt(1)).toString();
+	var mirror = (size0-id.substring(0, 2)).toString().padStart(2, "0")+(id.substring(2, 4)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -545,7 +576,7 @@ function symmetryXY(id, className) {
 }
 
 function symmetryRadial2(id, className) {
-	var mirror = (size0-id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
+	var mirror = (size0-id.substring(0, 2)).toString().padStart(2, "0")+(size0-id.substring(2, 4)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -576,7 +607,7 @@ function symmetryRadial2(id, className) {
 
 function symmetryRadial4(id, className) {
 	// Opposite
-	var mirror = (size0-id.charAt(0)).toString()+(size0-id.charAt(1)).toString();
+	var mirror = (size0-id.substring(0, 2)).toString().padStart(2, "0")+(size0-id.substring(2, 4)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -604,7 +635,7 @@ function symmetryRadial4(id, className) {
 	}
 	
 	// Clockwise
-	var mirror = (size0-id.charAt(1)).toString()+(id.charAt(0)).toString();
+	var mirror = (size0-id.substring(2, 4)).toString().padStart(2, "0")+(id.substring(0, 2)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -632,7 +663,7 @@ function symmetryRadial4(id, className) {
 	}
 	
 	// Counter-Clockwise
-	var mirror = (id.charAt(1)).toString()+(size0-id.charAt(0)).toString();
+	var mirror = (id.substring(2, 4)).toString().padStart(2, "0")+(size0-id.substring(0, 2)).toString().padStart(2, "0");
 	if (mirror != id) {
 		var el = document.getElementById(mirror).firstChild;
 		if (el) {
@@ -658,24 +689,6 @@ function symmetryRadial4(id, className) {
 			}
 		}
 	}
-	return;
-}
-
-
-
-
-
-// Change settings
-
-function setBackground(hex) {
-	var r = document.querySelector(':root');
-	r.style.setProperty('--background', hex);
-	return;
-}
-
-function setForeground(hex) {
-	var r = document.querySelector(':root');
-	r.style.setProperty('--foreground', hex);
 	return;
 }
 

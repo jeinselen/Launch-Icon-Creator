@@ -44,10 +44,10 @@
 					<label for="symmetryRadial4"><input type="radio" name="symmetry" value="symmetryRadial4" id="symmetryRadial4"> 🔄 radial x4 &nbsp;&nbsp;</label>
 				</p>
 			</div>
-
+			
 			<div id="grid-column2">
 				<div id="grid-size">
-					<h2>canvas:</h2>
+					<h2>size:</h2>
 					<p>
 						<div class="flex">
 							<div id="dimension" class="dimension">
@@ -58,16 +58,39 @@
 						</div>
 					</p>
 				</div>
-
+				
 				<div id="grid-colors">
-					<h2>colors:</h2>
+					<h2>background:</h2>
 					<p>
 						<div class="flex">
-						<input type="color" name="background-color" id="background-color" value="#000000" onchange="setBackground(this.value)"/>
-							<input type="color" name="background-color" id="background-color" value="#ffffff" onchange="setForeground(this.value)" />
+							<input type="radio" name="background" value="0" id="background0" onchange="setBackground(this)" style="background-color: black;" checked>
+							<input type="radio" name="background" value="1" id="background1" onchange="setBackground(this)" style="background-color: #1A1C1E;">
+							<input type="radio" name="background" value="2" id="background2" onchange="setBackground(this)" style="background-color: #2A2A32;">
+							<input type="radio" name="background" value="3" id="background3" onchange="setBackground(this)" style="background-color: transparent;" class="transparent">
 						</div>
 					</p>
 				</div>
+				
+				<div id="grid-colors">
+					<h2>foreground:</h2>
+					<p>
+						<div class="flex">
+							<input type="radio" name="foreground" value="4" id="foreground4" onchange="setForeground(this)" style="background-color: #1E5AF2;">
+							<input type="radio" name="foreground" value="5" id="foreground5" onchange="setForeground(this)" style="background-color: #6806CC;">
+							<input type="radio" name="foreground" value="6" id="foreground6" onchange="setForeground(this)" style="background-color: #FF1C52;">
+							<input type="radio" name="foreground" value="7" id="foreground7" onchange="setForeground(this)" style="background-color: #FFCC2D;">
+						</div>
+					</p>
+					<p>
+						<div class="flex">
+							<input type="radio" name="foreground" value="0" id="foreground0" onchange="setForeground(this)" style="background-color: white;" checked>
+							<input type="radio" name="foreground" value="2" id="foreground1" onchange="setForeground(this)" style="background-color: #9296A0;">
+							<input type="radio" name="foreground" value="2" id="foreground2" onchange="setForeground(this)" style="background-color: #474A52;">
+							<input type="radio" name="foreground" value="3" id="background3" onclick="setForeground(this)" style="background-color: transparent;" class="random">
+						</div>
+					</p>
+				</div>
+			
 			</div>
 		</div>
 
