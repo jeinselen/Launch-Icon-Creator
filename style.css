@@ -1,0 +1,74 @@
+body {
+	background-color: grey;
+}
+
+#container {
+	position: relative;
+	width: 700px;
+	height: 700px;
+	margin: auto;
+	padding: 0;
+	background-color: white;
+}
+
+.pixel {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	margin: 0;
+	padding: 0;
+	/* 	border: 1px solid red; */
+	overflow: hidden;
+}
+
+.top,
+.bot {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	background-color: black;
+}
+
+.top {
+	top: 0px;
+}
+
+.bot {
+	top: 100px;
+}
+
+.a {
+	border-radius: 0;
+}
+
+.b {
+	width: 101px;
+	height: 101px;
+	margin: 0 -1px -1px 0;
+	border-radius: 100px 0 0 0;
+}
+
+.c {
+	width: 101px;
+	height: 101px;
+	margin: 0 0 -1px -1px;
+	border-radius: 0 100px 0 0;
+}
+
+.d {
+	width: 101px;
+	height: 101px;
+	margin: -1px 0 0 -1px;
+	border-radius: 0 0 100px 0;
+}
+
+.e {
+	width: 101px;
+	height: 101px;
+	margin: -1px -1px 0 0;
+	border-radius: 0 0 0 100px;
+}
+
+.f {
+	display: none;
+}
