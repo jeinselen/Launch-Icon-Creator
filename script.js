@@ -74,14 +74,12 @@ function variablesToString() {
 // Replace content with fill, random, or preset string
 function setData(str) {
 	// If string is provided, update global variables (shortest possible string: "1x1=a")
-	// Danger: assumes string is valid (there is no validation process)
-	if (str && str.length >= 5) {
-		dataString = str;
-		stringToVariables(str);
+	// Danger: assumes string is valid (there isn't really any validation process other than checking if it exists)
 	
 	// If "rand" is specified, generate random values
-	} else if (str && str == "rand") {
-		var char = ["a","a","a","a","b","c","d","e","f","f","f","f"]; // Control population frequency by adding duplicate members
+	if (str && str.startsWith("rand=")) {
+		let char = Array.from(str.replace('rand=','')); // Remove identifier and split chracters into array
+		// var char = ["a","a","a","a","b","c","d","e","f","f","f","f"]; // Control population frequency by adding duplicate members
 		dataArray = []; // Empty current array
 		var row = [];
 		for (i = 0; i < size1; i++) {
@@ -98,6 +96,11 @@ function setData(str) {
 		dataArray = Array(size1).fill(str) // Create row (horizontal)
 		dataArray = Array(size1).fill(dataArray) // Populate rows (vertical)
 		variablesToString(); // Update string data
+	
+	// If any string is provided, assume it's valid and process
+	} else if (str && str.length >= 5) {
+		dataString = str;
+		stringToVariables(str);
 	}
 	
 	// logVariables("0");
